@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">鱼管家</string>
+
+    <!--tab菜单-->
+    <string name="tabmenu1">池塘</string>
+    <string name="tabmenu2">镜头</string>
+    <string name="tabmenu3">泵机</string>
+
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#017cff</color>
+    <color name="colorPrimaryDark">#016ee2</color>
+    <color name="colorAccent">#06dc27</color>
+    <!--主题颜色-->
+    <color name="main_color">@color/colorPrimary</color>
+    <color name="main_color_deeper">@color/colorPrimaryDark</color>
+    <color name="tab_selected">#4050fc</color>
+    <color name="tab_unselected">#131313</color>
+
+    <!--常用颜色-->
+    <color name="white">#ffffff</color>
+    <color name="blue">#017cff</color>
+    <color name="gray">#e0e0e0</color>
+    <color name="black">#000000</color>
+
+    <color name="text_black">#666666</color>
+    <color name="text_gray">#888888</color>
+
+
+</resources>

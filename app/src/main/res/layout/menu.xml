@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:padding="20dp">
+
+        <com.qican.ygj.view.CircleImageView
+            android:id="@+id/civ_headpic"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/defaultheadpic" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_msg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/message" />
+
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/setting" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/civ_headpic"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="小鱼"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="qiurenbieyuan@qq.com"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_userinfo"
+        style="@style/MenuItem"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/iv_userinfo"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/userinfo" />
+
+        <TextView
+            android:id="@+id/tv_userinfo"
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_userinfo"
+            android:text="我的信息" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_mypond"
+        style="@style/MenuItem">
+
+        <ImageView
+            android:id="@+id/iv_pond"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/pond" />
+
+        <TextView
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_pond"
+            android:text="我的池塘" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_mycamera"
+        style="@style/MenuItem">
+
+        <ImageView
+            android:id="@+id/iv_camera"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/camera" />
+
+        <TextView
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_camera"
+            android:text="我的镜头" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_margin="20dp"
+        android:background="@color/gray" />
+
+    <RelativeLayout
+        android:id="@+id/rl_addpond"
+        style="@style/MenuItem">
+
+        <ImageView
+            android:id="@+id/iv_addpond"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/add" />
+
+        <TextView
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_addpond"
+            android:text="添加池塘" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_addcamera"
+        style="@style/MenuItem">
+
+        <ImageView
+            android:id="@+id/iv_addcamera"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/add" />
+
+        <TextView
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_addcamera"
+            android:text="添加设备" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_linktoez"
+        style="@style/MenuItem">
+        <ImageView
+            android:id="@+id/iv_linktoez"
+            style="@style/MenuIcon.CenterVertical"
+            android:src="@drawable/videogo_icon" />
+        <TextView
+            style="@style/MenuText"
+            android:layout_toRightOf="@id/iv_linktoez"
+            android:text="关联萤石账号" />
+    </RelativeLayout>
+
+</LinearLayout>
