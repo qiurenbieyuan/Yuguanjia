@@ -28,6 +28,15 @@ android {
             maven { url "https://jitpack.io" }
         }
     }
+    defaultConfig {
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+        packagingOptions {
+            exclude "lib/arm64-v8a/librealm-jni.so"
+        }
+    }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -39,4 +48,5 @@ dependencies {
 
     //图片选择
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
+    compile 'me.xiaopan:sketch:2.3.0-beta5'
 }

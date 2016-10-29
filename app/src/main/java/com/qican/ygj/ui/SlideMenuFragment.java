@@ -1,5 +1,5 @@
 /**
- * 侧滑菜单
+ * 秋人别院，侧滑菜单
  */
 package com.qican.ygj.ui;
 

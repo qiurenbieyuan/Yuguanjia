@@ -50,6 +50,26 @@
                 android:text="添加池塘"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_add"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_selector_title"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:text="立即添加"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </RelativeLayout>
         <!-- 昵称-->
         <RelativeLayout
@@ -64,8 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="池塘名称"
-                android:textColor="@color/text_black"
-                android:textSize="15sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/edt_pond_name"
@@ -78,7 +98,7 @@
                 android:text="池塘001"
                 android:textColor="#444"
                 android:textColorHint="#999"
-                android:textSize="13sp" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <TextView
@@ -86,95 +106,67 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="池塘描述"
-            android:textColor="@color/text_black"
-            android:textSize="15sp" />
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/edt_pond_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:hint="池塘多大？位置在哪？"
-            android:lines="5"
+            android:hint="有没有什么需要介绍的呢？"
+            android:lines="3"
             android:maxLines="3"
             android:padding="15dp"
             android:textColor="#444"
             android:textColorHint="#999"
-            android:textSize="13sp" />
+            android:textSize="16sp" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:padding="15dp"
+            android:text="图片（选填，池塘封面）"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
 
+        <!-- 昵称-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector">
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="图片（选填，池塘封面）"
-                android:textColor="@color/text_black"
-                android:textSize="15sp" />
-
-            <!-- 昵称-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_selector"
-                android:padding="15dp">
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/iv_img1"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
+                    android:id="@+id/iv_imgdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
                     android:src="@drawable/defaultheadpic"
                     android:visibility="gone" />
 
                 <ImageView
-                    android:id="@+id/iv_img2"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/defaultheadpic"
+                    android:id="@+id/iv_close"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/close"
                     android:visibility="gone" />
+            </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/iv_img3"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/defaultheadpic"
-                    android:visibility="gone" />
+            <ImageView
+                android:id="@+id/iv_addimg"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/addimage" />
 
-                <ImageView
-                    android:id="@+id/iv_img4"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/defaultheadpic"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/iv_addimg"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/addimage" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/btn_selector_title"
-                android:text="立即添加"
-                android:textColor="@color/white" />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 

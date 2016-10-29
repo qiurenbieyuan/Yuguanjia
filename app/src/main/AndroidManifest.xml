@@ -52,10 +52,18 @@
         <activity
             android:name=".ui.AddPondActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <!--Image Selector Entry-->
         <activity
-            android:configChanges="orientation|screenSize"
-            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+            android:configChanges="orientation|screenSize" />
+
         <receiver
             android:name="com.qican.ygj.receiver.EzvizBroadcastReceiver"
             android:exported="false">
