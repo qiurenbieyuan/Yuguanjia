@@ -37,4 +37,9 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="auto_wifi_status_style_normal">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/common_sub_text</item>
+        <item name="android:textSize">@dimen/loading_text_size</item>
+    </style>
 </resources>

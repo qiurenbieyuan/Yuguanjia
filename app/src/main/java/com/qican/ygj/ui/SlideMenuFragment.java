@@ -22,6 +22,7 @@ import com.qican.ygj.bean.Pond;
 import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.ui.adapter.CommonAdapter;
 import com.qican.ygj.ui.adapter.ViewHolder;
+import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
 import com.videogo.main.EzvizWebViewActivity;
@@ -32,9 +33,8 @@ import java.util.List;
 
 
 public class SlideMenuFragment extends Fragment implements View.OnClickListener {
-    private CommonTools myTool;
     private static final String TAG = "SlideMenuFragment";
-
+    private CommonTools myTool;
     private OnFramentListener mCallBack;
     private RelativeLayout rlUserInfo, rlMyPond, rlMyCamera, rlAddPond, rlAddCamera, rlLinkToEZ;
     private CircleImageView civHeadImg;
@@ -117,7 +117,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener 
                 startActivity(new Intent(getActivity(), AddPondActivity.class));
                 break;
             case R.id.rl_addcamera:
-                myTool.showInfo("添加监控设备");
+                startActivity(new Intent(getActivity(), CaptureActivity.class));
                 break;
             case R.id.iv_msg:
                 myTool.showInfo("系统消息");

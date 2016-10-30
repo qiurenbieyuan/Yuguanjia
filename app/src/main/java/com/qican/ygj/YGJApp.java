@@ -23,12 +23,12 @@ import com.videogo.openapi.EZOpenSDK;
 import java.io.File;
 
 public class YGJApp extends Application {
-    private CommonTools myTool;
     //萤石APPKEY
     public static final String EZ_appKey = "db6b68c3975b4e8f932e752753b08e47";
     //so库存放位置
     public static final String loadLibraryAbsPath = Environment.getExternalStorageDirectory() + "/"
             + "YGJ/libs/";
+    private CommonTools myTool;
 
     @Override
     public void onCreate() {
@@ -46,7 +46,7 @@ public class YGJApp extends Application {
         if (!dirFile.exists()) {
             dirFile.mkdirs();
         }
-        boolean success = EZOpenSDK.initLib(YGJApp.this, EZ_appKey, loadLibraryAbsPath);
+        boolean success = EZOpenSDK.initLib(YGJApp.this, EZ_appKey, "");
         if (!success) {
             myTool.showInfo("EZOpenSDK初始化失败,请联系开发者,qq:1061315674！");
         }
