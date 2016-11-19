@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.qican.ygj">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -39,7 +40,8 @@
         android:icon="@mipmap/ygj_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -71,6 +73,19 @@
             android:name=".ui.PreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait" />
+
         <!--Image Selector Entry-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"

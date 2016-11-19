@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.qican.ygj.R;
 import com.qican.ygj.ui.scan.RootActivity;
-import com.qican.ygj.ui.scan.WaitDialog;
+import com.qican.ygj.view.WaitDialog;
 import com.qican.ygj.utils.ActivityUtils;
 import com.videogo.constant.Constant;
 import com.videogo.constant.IntentConsts;

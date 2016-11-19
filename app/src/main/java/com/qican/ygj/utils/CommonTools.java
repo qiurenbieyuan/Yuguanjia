@@ -5,7 +5,9 @@
  */
 package com.qican.ygj.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +22,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Pump;
+import com.qican.ygj.task.CommonTask;
+import com.qican.ygj.ui.SettingsActivity;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class CommonTools {
 
@@ -124,5 +130,59 @@ public class CommonTools {
         bitmap = BitmapFactory.decodeFile(path, null);
 
         return bitmap;
+    }
+
+    /**
+     * 启动activity
+     *
+     * @param activity
+     */
+    public void startActivity(Class<?> activity) {
+        try {
+            mContext.startActivity(new Intent(mContext, activity));
+        } catch (Exception e) {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("异常！")
+                    .setContentText("启动Activity失败！[e:" + e.toString() + "]")
+                    .setConfirmText("确  定!")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    /**
+     * 设置用户登录标志
+     *
+     * @param isLogin
+     * @return
+     */
+    public CommonTools setLoginFlag(boolean isLogin) {
+        editor.putBoolean(ConstantValue.KEY_ISLOGIN, isLogin);
+        editor.commit();
+        return this;
+    }
+
+    /**
+     * 判断用户是否登录
+     *
+     * @return true-已登录，false-未登录
+     */
+    public boolean isLogin() {
+        return sp.getBoolean(ConstantValue.KEY_ISLOGIN, false);
+    }
+
+    public CommonTools setUserName(String userName) {
+        editor.putString(ConstantValue.KEY_USERNAME, userName);
+        editor.commit();
+        return this;
+    }
+
+    public String getUserName() {
+        return sp.getString(ConstantValue.KEY_USERNAME, "");
     }
 }

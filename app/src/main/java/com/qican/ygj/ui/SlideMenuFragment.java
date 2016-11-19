@@ -16,6 +16,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.nostra13.universalimageloader.utils.L;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Camera;
 import com.qican.ygj.bean.Pond;
@@ -31,8 +32,10 @@ import com.videogo.openapi.EZOpenSDK;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class SlideMenuFragment extends Fragment implements View.OnClickListener {
+
+public class SlideMenuFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "SlideMenuFragment";
     private CommonTools myTool;
     private OnFramentListener mCallBack;
@@ -48,10 +51,16 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener 
 
         initView(view);
         initEvent();
-        initData();
-
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (myTool.isLogin()) {
+            initData();
+        }
     }
 
     private void initData() {
@@ -69,6 +78,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener 
 
         ivMsg.setOnClickListener(this);
         ivSetting.setOnClickListener(this);
+        civHeadImg.setOnLongClickListener(this);
     }
 
     @Override
@@ -98,20 +108,50 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_userinfo:
-                myTool.showInfo("我的信息");
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("我的信息")
+                        .setContentText("还在进一步完善当中!")
+                        .setConfirmText("确  定!")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.rl_mypond:
-                myTool.showInfo("我的池塘");
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        EZOpenSDK.getInstance().logout();
-                    }
-                }.start();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("我的池塘")
+                        .setContentText("注销萤石账号？")
+                        .setConfirmText("是的，注销！")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        super.run();
+                                        EZOpenSDK.getInstance().logout();
+                                    }
+                                }.start();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.rl_mycamera:
-                myTool.showInfo("我的设备");
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("我的设备")
+                        .setContentText("还在进一步完善当中!")
+                        .setConfirmText("确  定!")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.rl_addpond:
                 startActivity(new Intent(getActivity(), AddPondActivity.class));
@@ -120,14 +160,34 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener 
                 startActivity(new Intent(getActivity(), CaptureActivity.class));
                 break;
             case R.id.iv_msg:
-                myTool.showInfo("系统消息");
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("系统消息")
+                        .setContentText("还在进一步完善当中!")
+                        .setConfirmText("确  定!")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.iv_setting:
-                myTool.showInfo("系统设置");
+                myTool.startActivity(SettingsActivity.class);
                 break;
             case R.id.rl_linktoez:
                 EZOpenSDK.getInstance().openLoginPage();
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.civ_headpic:
+                myTool.startActivity(LoginActivity.class);
+                break;
+        }
+        return false;
     }
 }

@@ -75,27 +75,55 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/btn_selector"
             android:padding="15dp">
 
-            <TextView
-                android:id="@+id/tv_pond_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/iv_pond_name"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:text="池塘名称"
-                android:textColor="@color/blue"
-                android:textSize="18sp" />
+                android:src="@drawable/pondname" />
 
             <EditText
                 android:id="@+id/edt_pond_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/tv_pond_name"
+                android:layout_toRightOf="@id/iv_pond_name"
                 android:hint="请输入池塘名字"
                 android:singleLine="true"
                 android:text="池塘001"
+                android:textColor="#444"
+                android:textColorHint="#999"
+                android:textSize="16sp" />
+        </RelativeLayout>
+        <!-- 昵称-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_selector"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/iv_pond_desc"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/desc" />
+
+            <EditText
+                android:id="@+id/edt_pond_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/iv_pond_desc"
+                android:background="@color/white"
+                android:hint="有没有什么需要介绍的呢？"
+                android:lines="3"
+                android:maxLines="3"
                 android:textColor="#444"
                 android:textColorHint="#999"
                 android:textSize="16sp" />
@@ -105,29 +133,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="池塘描述"
-            android:textColor="@color/blue"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/edt_pond_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:hint="有没有什么需要介绍的呢？"
-            android:lines="3"
-            android:maxLines="3"
-            android:padding="15dp"
-            android:textColor="#444"
-            android:textColorHint="#999"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
             android:text="图片（选填，池塘封面）"
-            android:textColor="@color/blue"
+            android:textColor="@color/text_black"
             android:textSize="18sp" />
 
         <!-- 昵称-->
@@ -165,9 +172,7 @@
                 android:layout_height="70dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/addimage" />
-
         </RelativeLayout>
     </LinearLayout>
-
 
 </LinearLayout>

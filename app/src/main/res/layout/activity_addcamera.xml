@@ -5,169 +5,178 @@
     android:background="@color/gray"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!-- 顶部titleBar-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="48dp"
+        android:background="@color/main_color">
 
-        <!-- 顶部titleBar-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@color/main_color">
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_selector_title"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-            <LinearLayout
-                android:id="@+id/ll_back"
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/btn_selector_title"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/back" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingRight="10dp"
-                    android:text="返回"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/back" />
 
             <TextView
-                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="添加池塘"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:id="@+id/ll_add"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/btn_selector_title"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingRight="10dp"
-                    android:text="立即添加"
-                    android:textColor="@color/white" />
-            </LinearLayout>
-        </RelativeLayout>
-        <!-- 昵称-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
-
-            <TextView
-                android:id="@+id/tv_pond_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="池塘名称"
-                android:textColor="@color/blue"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/edt_pond_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/tv_pond_name"
-                android:hint="请输入池塘名字"
-                android:singleLine="true"
-                android:text="池塘001"
-                android:textColor="#444"
-                android:textColorHint="#999"
-                android:textSize="16sp" />
-        </RelativeLayout>
+                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:text="返回"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:text="池塘描述"
-            android:textColor="@color/blue"
-            android:textSize="18sp" />
+            android:layout_centerInParent="true"
+            android:text="添加相机"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/edt_pond_desc"
+        <LinearLayout
+            android:id="@+id/ll_add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_selector_title"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:text="立即添加"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+    <!-- 昵称-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_selector"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/iv_device_info"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/number" />
+
+        <ImageView
+            android:id="@+id/iv_scan"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/scan" />
+
+        <TextView
+            android:id="@+id/edt_device_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:hint="有没有什么需要介绍的呢？"
-            android:lines="3"
-            android:maxLines="3"
-            android:padding="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/iv_scan"
+            android:layout_toRightOf="@id/iv_device_info"
+            android:gravity="center"
+            android:hint="请扫描相机二维码\n获取设备信息"
             android:textColor="#444"
             android:textColorHint="#999"
             android:textSize="16sp" />
 
-        <TextView
+    </RelativeLayout>
+
+    <!-- 昵称-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_selector"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/iv_pond_name"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/camera_name" />
+
+        <EditText
+            android:id="@+id/edt_pond_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:text="图片（选填，池塘封面）"
-            android:textColor="@color/blue"
-            android:textSize="18sp" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_pond_name"
+            android:hint="请给相机起个名吧"
+            android:singleLine="true"
+            android:textColor="#444"
+            android:textColorHint="#999"
+            android:textSize="16sp" />
+    </RelativeLayout>
 
-        <!-- 昵称-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_selector">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="请选择所属池塘（选填）"
+        android:textColor="@color/text_black"
+        android:textSize="16sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <!--历史和收货地址-->
+    <ListView
+        android:id="@+id/lv_mypond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_selector"
+        android:divider="@color/gray_bg"
+        android:dividerHeight="0.1dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
-                <ImageView
-                    android:id="@+id/iv_imgdesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/defaultheadpic"
-                    android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/rl_nopond"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/iv_close"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/close"
-                    android:visibility="gone" />
-            </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_nodata"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/nodata" />
 
-            <ImageView
-                android:id="@+id/iv_addimg"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/addimage" />
-
-        </RelativeLayout>
-    </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_nodata"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="还没有池塘哦，点击添加"
+            android:textColor="@color/text_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
 </LinearLayout>

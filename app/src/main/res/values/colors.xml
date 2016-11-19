@@ -152,4 +152,7 @@
     <color name="opensdk_cameralist_bg">#f0f0f1</color>
     <color name="on_off_text_selector">#3ea6ef</color>
     <color name="grouplayout_item_bg_sel">#f3f4f5</color>
+
+    <color name="head_border">#93d9ff</color>
+
 </resources>

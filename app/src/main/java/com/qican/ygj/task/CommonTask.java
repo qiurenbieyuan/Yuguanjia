@@ -21,8 +21,11 @@ import com.qican.ygj.R;
 import com.qican.ygj.bean.PostResult;
 import com.qican.ygj.listener.OnTaskListener;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.view.WaitDialog;
 
 import java.util.Map;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public abstract class CommonTask<ResultType> extends AsyncTask<Map, Void, PostResult> {
 
@@ -33,6 +36,8 @@ public abstract class CommonTask<ResultType> extends AsyncTask<Map, Void, PostRe
     private boolean isShowExceptionState = false; // 是否显示网络异常状态
     private ImageView ivProgress;
     private int taskID;
+    private WaitDialog mDialog;
+    private SweetAlertDialog mSweetDialog;
 
     /**
      * 设置旋转动画
@@ -75,6 +80,14 @@ public abstract class CommonTask<ResultType> extends AsyncTask<Map, Void, PostRe
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
+        //显示进度对话框
+        if (mDialog != null) {
+            mDialog.show();
+        }
+
+        if (mSweetDialog != null) {
+            mSweetDialog.show();
+        }
 
         if (ivProgress != null) {
             ivProgress.setVisibility(View.VISIBLE);
@@ -101,6 +114,14 @@ public abstract class CommonTask<ResultType> extends AsyncTask<Map, Void, PostRe
         // 如果设置了进度条，则使进度条不见
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);
+        }
+
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+
+        if (mSweetDialog != null) {
+            mSweetDialog.dismissWithAnimation();
         }
 
         if (ivProgress != null) {
@@ -158,6 +179,23 @@ public abstract class CommonTask<ResultType> extends AsyncTask<Map, Void, PostRe
 
     public CommonTask<ResultType> setIvProgress(@NonNull ImageView ivProgress) {
         this.ivProgress = ivProgress;
+        return this;
+    }
+
+    //设置等待对话框
+    public CommonTask<ResultType> setWaitDialog(WaitDialog mDialog) {
+        this.mDialog = mDialog;
+        return this;
+    }
+
+    /**
+     * 设置SweetAlertDialog
+     *
+     * @param mDialog
+     * @return
+     */
+    public CommonTask<ResultType> setSweetDialog(SweetAlertDialog mDialog) {
+        this.mSweetDialog = mDialog;
         return this;
     }
 }

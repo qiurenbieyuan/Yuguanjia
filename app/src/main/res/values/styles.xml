@@ -16,6 +16,13 @@
         <item name="android:src">@drawable/add</item>
     </style>
 
+    <!--子菜单图标-->
+    <style name="Icon_50dp">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:src">@drawable/add</item>
+    </style>
+
     <style name="MenuIcon.CenterVertical">
         <item name="android:layout_centerVertical">true</item>
     </style>

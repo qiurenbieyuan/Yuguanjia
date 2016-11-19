@@ -8,6 +8,8 @@ import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.qican.ygj.view.WaitDialog;
+
 public class RootActivity extends Activity {
     public static boolean isOnRusumed = false;
     private static boolean mBackground = false;

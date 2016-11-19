@@ -6,6 +6,7 @@ package com.qican.ygj.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,11 +14,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.qican.ygj.R;
 import com.qican.ygj.utils.CommonTools;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
@@ -103,17 +107,45 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
 
     private void addPond() {
         if (edtPondName.getText().toString().trim().isEmpty()) {
+            //震动View
+            YoYo.with(Techniques.Shake)
+                    .duration(700)
+                    .playOn(edtPondName);
             myTool.showInfo("还没有添加池塘名字哦！");
             return;
         }
         if (edtPondDesc.getText().toString().trim().isEmpty()) {
+            YoYo.with(Techniques.Shake)
+                    .duration(700)
+                    .playOn(edtPondDesc);
             myTool.showInfo("还没有池塘描述唷！");
             return;
         }
-        //添加池塘信息
-        myTool.showInfo("添加成功！");
-        finish();
-        startActivity(new Intent(this, AddSuccessActivity.class));
+
+        //添加池塘信息,成功的提示对话框
+        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("添加成功!")
+                .setContentText("你的鱼塘尽在掌握之中!")
+                .setConfirmText("完  成")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        new CountDownTimer(500, 500) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                finish();
+                            }
+                        }.start();
+                    }
+                })
+                .show();
+//        startActivity(new Intent(this, AddSuccessActivity.class));
     }
 
     @Override

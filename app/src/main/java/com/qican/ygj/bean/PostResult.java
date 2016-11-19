@@ -8,15 +8,17 @@ public class PostResult<T> {
         return t;
     }
 
-    public void setResult(T t) {
+    public PostResult<T> setResult(T t) {
         this.t = t;
+        return this;
     }
 
     public Exception getException() {
         return e;
     }
 
-    public void setException(Exception e) {
+    public PostResult<T> setException(Exception e) {
         this.e = e;
+        return this;
     }
 }
