@@ -4,33 +4,24 @@
 package com.qican.ygj.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.nostra13.universalimageloader.utils.L;
 import com.qican.ygj.R;
-import com.qican.ygj.bean.Camera;
-import com.qican.ygj.bean.Pond;
 import com.qican.ygj.listener.OnFramentListener;
-import com.qican.ygj.ui.adapter.CommonAdapter;
-import com.qican.ygj.ui.adapter.ViewHolder;
+import com.qican.ygj.ui.login.LoginActivity;
 import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
-import com.videogo.main.EzvizWebViewActivity;
 import com.videogo.openapi.EZOpenSDK;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -58,12 +49,14 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        if (myTool.isLogin()) {
-            initData();
-        }
+        initData();
     }
 
     private void initData() {
+        if (!myTool.isLogin()) {
+            civHeadImg.setImageBitmap(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.defaultheadpic));
+            return;
+        }
         //显示头像
         myTool.showImage("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=571129321,501172449&fm=21&gp=0.jpg", civHeadImg);
     }
@@ -115,6 +108,8 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
+                                myTool.setLoginFlag(false);
+                                initData();
                                 sDialog.dismissWithAnimation();
                             }
                         })

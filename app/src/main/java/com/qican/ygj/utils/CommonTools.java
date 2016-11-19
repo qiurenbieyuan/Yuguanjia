@@ -156,6 +156,29 @@ public class CommonTools {
     }
 
     /**
+     * 启动activity,得到返回结果
+     *
+     * @param activity
+     */
+    public void startActivityForResult(Class<?> activity, int requestCode) {
+        try {
+            ((Activity) mContext).startActivityForResult(new Intent(mContext, activity), requestCode);
+        } catch (Exception e) {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("异常！")
+                    .setContentText("启动Activity失败！[e:" + e.toString() + "]")
+                    .setConfirmText("确  定!")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    /**
      * 设置用户登录标志
      *
      * @param isLogin
@@ -184,5 +207,15 @@ public class CommonTools {
 
     public String getUserName() {
         return sp.getString(ConstantValue.KEY_USERNAME, "");
+    }
+
+    public CommonTools setUserHeadURL(String url) {
+        editor.putString(ConstantValue.KEY_HEADURL, url);
+        editor.commit();
+        return this;
+    }
+
+    public String getUserHeadURL() {
+        return sp.getString(ConstantValue.KEY_HEADURL, "");
     }
 }
