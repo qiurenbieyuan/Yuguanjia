@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="40dp"
+    android:background="@drawable/twodcode_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:padding="10dp"
+            android:text="请选择性别"
+            android:textColor="@color/text_black"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/pb_changesex"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_bg" />
+
+    <RelativeLayout
+        android:id="@+id/rl_male"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_selector"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_male"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/male" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_male"
+            android:text="男"
+            android:textColor="@color/text_black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_male_selected"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/selected" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_female"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_selector"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_female"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/female" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_female"
+            android:text="女"
+            android:textColor="@color/text_black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_female_selected"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/selected" />
+    </RelativeLayout>
+
+</LinearLayout>

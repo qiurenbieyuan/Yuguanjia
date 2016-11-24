@@ -28,11 +28,15 @@ import com.qican.ygj.bean.PostResult;
 import com.qican.ygj.listener.OnTaskListener;
 import com.qican.ygj.task.CommonTask;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.utils.ConstantValue;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.Call;
 
 public class LoginActivity extends Activity implements View.OnClickListener, OnTaskListener {
 
@@ -47,6 +51,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, OnT
     private SweetAlertDialog mLoginDialog;
     //登录任务
     private CommonTask<String> mLoginTask;
+    private String userName, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +126,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, OnT
     }
 
     private void attempLogin() {
+
+        userName = edtUserName.getText().toString().trim();
+        password = edtPassword.getText().toString();
+
         if ("".equals(edtUserName.getText().toString().trim())) {
             YoYo.with(Techniques.Shake)
                     .duration(700).withListener(new AnimatorListenerAdapter() {
@@ -174,12 +183,81 @@ public class LoginActivity extends Activity implements View.OnClickListener, OnT
             }
         };
         mLoginTask.setOnTaskFinishListener(this);
-        mLoginTask.execute(map);//开始执行
+//        mLoginTask.execute(map);//开始执行
 
         mLoginDialog = null;
         mLoginDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
                 .setTitleText("正在登录···");
         mLoginDialog.show();
+
+        String url = ConstantValue.SERVICE_ADDRESS + "login";
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("userId", userName)
+                .addParams("userPwd", password)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        mLoginDialog.setTitleText("登录失败")
+                                .setContentText("登录失败，异常信息 e-->[" + e.toString() + "]")
+                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        mLoginDialog = null;
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        loginResponse(response);
+                    }
+
+
+                });
+
+    }
+
+    private void loginResponse(String result) {
+        switch (result) {
+            case "success":
+                //保存一些设置
+                myTool.setLoginFlag(true);
+                myTool.setUserName(edtUserName.getText().toString().trim());
+                myTool.setUserHeadURL("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=571129321,501172449&fm=21&gp=0.jpg");
+
+                mLoginDialog.setTitleText("登录成功")
+                        .setContentText("登录成功，鱼管家欢迎您！")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+
+                new CountDownTimer(6000, 1000) {
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        mLoginDialog.setConfirmText("立即开启（" + millisUntilFinished / 1000 + "s）");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        finish();
+                    }
+                }.start();
+                break;
+            case "error":
+                mLoginDialog.setTitleText("错误")
+                        .setContentText("用户已存在或其他系统错误！")
+                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                break;
+            default:
+                mLoginDialog.setTitleText("提示")
+                        .setContentText("服务器返回的信息：" + result + "！")
+                        .changeAlertType(SweetAlertDialog.WARNING_TYPE);
+                break;
+        }
     }
 
     private void setTextListener() {
@@ -272,36 +350,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, OnT
         mLoginTask = null;
         switch (t.getTaskID()) {
             case TASKID_LOGIN:
-                //保存一些设置
-                myTool.setLoginFlag(true);
-                myTool.setUserName(edtUserName.getText().toString().trim());
-                myTool.setUserHeadURL("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=571129321,501172449&fm=21&gp=0.jpg");
-
-                mLoginDialog.setTitleText("登录成功")
-                        .setContentText("登录成功，鱼管家欢迎您！")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                finish();
-                            }
-                        })
-                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-
-                new CountDownTimer(6000, 1000) {
-
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        mLoginDialog.setConfirmText("立即开启（" + millisUntilFinished / 1000 + "s）");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        finish();
-                    }
-                }.start();
                 break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

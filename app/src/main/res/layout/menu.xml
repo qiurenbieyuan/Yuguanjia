@@ -6,9 +6,10 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_myinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
+        android:background="@drawable/btn_selector_title"
         android:padding="20dp">
 
         <com.qican.ygj.view.CircleImageView
@@ -46,6 +47,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="小鱼"
@@ -54,6 +56,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_signature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -152,10 +155,12 @@
     <RelativeLayout
         android:id="@+id/rl_linktoez"
         style="@style/MenuItem">
+
         <ImageView
             android:id="@+id/iv_linktoez"
             style="@style/MenuIcon.CenterVertical"
             android:src="@drawable/videogo_icon" />
+
         <TextView
             style="@style/MenuText"
             android:layout_toRightOf="@id/iv_linktoez"

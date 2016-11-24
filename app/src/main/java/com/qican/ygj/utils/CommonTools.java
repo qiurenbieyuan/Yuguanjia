@@ -7,6 +7,7 @@ package com.qican.ygj.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -24,6 +25,9 @@ import com.qican.ygj.R;
 import com.qican.ygj.bean.Pump;
 import com.qican.ygj.task.CommonTask;
 import com.qican.ygj.ui.SettingsActivity;
+import com.qican.ygj.ui.login.LoginActivity;
+
+import java.io.File;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -42,6 +46,7 @@ public class CommonTools {
     private Context mContext;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+    private CropHelper mCropHelper;
 
     public CommonTools(Context context) {
         this.mContext = context;
@@ -209,6 +214,26 @@ public class CommonTools {
         return sp.getString(ConstantValue.KEY_USERNAME, "");
     }
 
+    public CommonTools setNickName(String nickName) {
+        editor.putString(ConstantValue.KEY_NICKNAME, nickName);
+        editor.commit();
+        return this;
+    }
+
+    public String getNickName() {
+        return sp.getString(ConstantValue.KEY_NICKNAME, "小鱼_001");
+    }
+
+    public CommonTools setUserSex(String userSex) {
+        editor.putString(ConstantValue.KEY_SEX, userSex);
+        editor.commit();
+        return this;
+    }
+
+    public String getUserSex() {
+        return sp.getString(ConstantValue.KEY_SEX, "小鱼_001");
+    }
+
     public CommonTools setUserHeadURL(String url) {
         editor.putString(ConstantValue.KEY_HEADURL, url);
         editor.commit();
@@ -217,5 +242,74 @@ public class CommonTools {
 
     public String getUserHeadURL() {
         return sp.getString(ConstantValue.KEY_HEADURL, "");
+    }
+
+    /**
+     * 用户签名
+     *
+     * @param autograph
+     * @return
+     */
+    public CommonTools setAutograph(String autograph) {
+        editor.putString(ConstantValue.KEY_AUTOGRAPH, autograph);
+        editor.commit();
+        return this;
+    }
+
+    public String getSignature() {
+        return sp.getString(ConstantValue.KEY_AUTOGRAPH, "这个家伙很懒，没有留下什么！");
+    }
+
+    /**
+     * 带有提示框的登录状态检测
+     *
+     * @return
+     */
+    public boolean isLoginWithDialog() {
+        // 未登录则提示
+        if (!isLogin()) {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("未登录")
+                    .setContentText("您还没有登录唷,亲!")
+                    .setConfirmText("立即登录")
+                    .setCancelText("取  消")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            startActivity(LoginActivity.class);
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+        }
+        return isLogin();
+    }
+
+    /**
+     * 获取默认池塘封面
+     *
+     * @return
+     */
+    public File getDefaultPondImg() {
+
+        mCropHelper = new CropHelper((Activity) mContext, OSUtils.getSdCardDirectory() + "/pond_img.png");
+
+        File file = null;
+        Bitmap pondBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_pond);
+
+        if (BitmapUtils.saveFile(pondBitmap, USER_FILE_PATH + "/img/default_pond_img.png")) {
+            file = new File(USER_FILE_PATH + "/img/default_pond_img.png");
+        } else {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("失败")
+                    .setContentText("默认封面设置失败!")
+                    .show();
+            file = new File("");
+        }
+        return file;
+    }
+
+    public String getUserId() {
+        return getUserName();
     }
 }

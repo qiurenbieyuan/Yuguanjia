@@ -111,12 +111,21 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.rl_exit:
                 new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("退出")
-                        .setContentText("还在进一步完善当中!")
-                        .setConfirmText("确  定!")
+                        .setTitleText("确定注销？")
+                        .setContentText("确定注销当前用户吗亲？")
+                        .setConfirmText("确  定")
+                        .setCancelText("否，点错了")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
+                                myTool.setLoginFlag(false);
+                                finish();
                                 sDialog.dismissWithAnimation();
                             }
                         })

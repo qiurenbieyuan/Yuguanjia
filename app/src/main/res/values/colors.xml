@@ -154,5 +154,6 @@
     <color name="grouplayout_item_bg_sel">#f3f4f5</color>
 
     <color name="head_border">#0668f1</color>
+    <color name="light_blue">#d9e9ff</color>
 
 </resources>

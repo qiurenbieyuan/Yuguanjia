@@ -3,54 +3,46 @@
     android:id="@+id/rl_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/btn_selector"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:background="@drawable/round_item_bg"
+    android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/iv_history"
-        android:layout_width="50dp"
+        android:id="@+id/iv_pond_img"
+        android:layout_width="70dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:src="@drawable/pond" />
 
+    <ImageView
+        android:id="@+id/iv_selected"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/selected" />
+
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/iv_history"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/iv_selected"
+        android:layout_toRightOf="@id/iv_pond_img"
         android:orientation="vertical"
         android:padding="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:maxLines="1"
-                android:text="池塘名"
-                android:textColor="@color/text_black"
-                android:textSize="16dp" />
-
-
-            <TextView
-                android:id="@+id/tv_contact_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:maxLines="1"
-                android:text="2015 - 6 - 19"
-                android:textColor="#888"
-                android:textSize="13sp" />
-
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_pond_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:maxLines="1"
+            android:text="池塘名"
+            android:textColor="@color/text_black"
+            android:textSize="16dp" />
 
         <TextView
-            android:id="@+id/tv_contact_name"
+            android:id="@+id/tvpond_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

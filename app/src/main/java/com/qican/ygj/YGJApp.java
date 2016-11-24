@@ -19,8 +19,13 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.qican.ygj.utils.CommonTools;
 import com.videogo.openapi.EZOpenSDK;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 
 public class YGJApp extends Application {
     //萤石APPKEY
@@ -38,7 +43,20 @@ public class YGJApp extends Application {
         initUIL();
         //初始化萤石云SDK
         initEZSDK();
+        initHttpUtils();
     }
+
+    private void initHttpUtils() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(20000L, TimeUnit.MILLISECONDS)
+                .readTimeout(20000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
+    }
+
 
     //放到线程中优化启动
     private void initEZSDK() {

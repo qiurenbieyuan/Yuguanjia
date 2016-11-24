@@ -14,11 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.qican.ygj.R;
 import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.ui.login.LoginActivity;
-import com.qican.ygj.ui.scan.CaptureActivity;
+import com.qican.ygj.ui.userinfo.MyInfoActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
 import com.videogo.openapi.EZOpenSDK;
@@ -30,9 +31,10 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
     private static final String TAG = "SlideMenuFragment";
     private CommonTools myTool;
     private OnFramentListener mCallBack;
-    private RelativeLayout rlUserInfo, rlMyPond, rlMyCamera, rlAddPond, rlAddCamera, rlLinkToEZ;
+    private RelativeLayout rlUserInfo, rlMyPond, rlMyCamera, rlAddPond, rlAddCamera, rlLinkToEZ, rlMyInfo;
     private CircleImageView civHeadImg;
     private ImageView ivMsg, ivSetting;
+    private TextView tvNickName, tvSignature;
 
     @Nullable
     @Override
@@ -59,6 +61,8 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
         }
         //显示头像
         myTool.showImage("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=571129321,501172449&fm=21&gp=0.jpg", civHeadImg);
+        tvNickName.setText(myTool.getNickName());
+        tvSignature.setText(myTool.getSignature());
     }
 
     private void initEvent() {
@@ -68,6 +72,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
         rlAddPond.setOnClickListener(this);
         rlAddCamera.setOnClickListener(this);
         rlLinkToEZ.setOnClickListener(this);
+        rlMyInfo.setOnClickListener(this);
 
         ivMsg.setOnClickListener(this);
         ivSetting.setOnClickListener(this);
@@ -89,10 +94,14 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
         rlAddPond = (RelativeLayout) v.findViewById(R.id.rl_addpond);
         rlAddCamera = (RelativeLayout) v.findViewById(R.id.rl_addcamera);
         rlLinkToEZ = (RelativeLayout) v.findViewById(R.id.rl_linktoez);
+        rlMyInfo = (RelativeLayout) v.findViewById(R.id.rl_myinfo);
 
         civHeadImg = (CircleImageView) v.findViewById(R.id.civ_headpic);
         ivMsg = (ImageView) v.findViewById(R.id.iv_msg);
         ivSetting = (ImageView) v.findViewById(R.id.iv_setting);
+
+        tvNickName = (TextView) v.findViewById(R.id.tv_nickname);
+        tvSignature = (TextView) v.findViewById(R.id.tv_signature);
 
         myTool = new CommonTools(getActivity());
     }
@@ -101,19 +110,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_userinfo:
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("我的信息")
-                        .setContentText("还在进一步完善当中!")
-                        .setConfirmText("确  定!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                myTool.setLoginFlag(false);
-                                initData();
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                        .show();
+                myTool.startActivity(MyInfoActivity.class);
                 break;
             case R.id.rl_mypond:
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
@@ -152,7 +149,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 startActivity(new Intent(getActivity(), AddPondActivity.class));
                 break;
             case R.id.rl_addcamera:
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                myTool.startActivity(AddCameraActivity.class);
                 break;
             case R.id.iv_msg:
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
@@ -172,6 +169,9 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.rl_linktoez:
                 EZOpenSDK.getInstance().openLoginPage();
+                break;
+            case R.id.rl_myinfo:
+                myTool.startActivity(MyInfoActivity.class);
                 break;
         }
     }

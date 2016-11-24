@@ -94,7 +94,6 @@
                 android:layout_toRightOf="@id/iv_pond_name"
                 android:hint="请输入池塘名字"
                 android:singleLine="true"
-                android:text="池塘001"
                 android:textColor="#444"
                 android:textColorHint="#999"
                 android:textSize="16sp" />

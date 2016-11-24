@@ -20,7 +20,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 
-
 public class BitmapUtils {
 
     public static final int RAW_SIZE = 128;

@@ -42,16 +42,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
         <activity
             android:name="com.videogo.main.EzvizWebViewActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -88,6 +95,15 @@
 
         <activity
             android:name=".ui.login.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.userinfo.MyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.userinfo.NickNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.userinfo.SignatureActivity"
             android:screenOrientation="portrait" />
 
         <!--Image Selector Entry-->

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,16 @@ import com.qican.ygj.task.CommonTask;
 import com.qican.ygj.ui.adapter.CommonAdapter;
 import com.qican.ygj.ui.adapter.ViewHolder;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.utils.ConstantValue;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
 
 
 public class PondFragment extends Fragment implements OnTaskListener {
@@ -63,6 +69,27 @@ public class PondFragment extends Fragment implements OnTaskListener {
 
     private void initData() {
         mData = new ArrayList<>();
+
+        String url = ConstantValue.SERVICE_ADDRESS + "findPondByUser";
+        Log.i(TAG, "addPond: userId[" + myTool.getUserId() + "]");
+
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("userId", myTool.getUserId())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.i(TAG, "onResponse: " + response);
+                    }
+                });
+
         mLoadPondTask = new LoadPondTask(getActivity(), TASK_LOAD_POND);
         mLoadPondTask.setOnTaskFinishListener(this);
         mLoadPondTask.setIvProgress(ivProgress);

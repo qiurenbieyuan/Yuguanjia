@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/twodcode_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_headimg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/defaultheadpic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/iv_headimg"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="小鱼儿"
+                android:textColor="@color/text_black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/female" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/default_twodcode" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="扫描二维码，添加我的好友吧！"
+        android:textColor="@color/text_black"
+        android:textSize="14sp" />
+</LinearLayout>

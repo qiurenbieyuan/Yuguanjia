@@ -5,6 +5,9 @@ package com.qican.ygj.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -18,12 +21,18 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.qican.ygj.R;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.utils.ConstantValue;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import okhttp3.Call;
 
 public class AddPondActivity extends Activity implements View.OnClickListener {
     private static final int IMAGE_REQUEST_CODE = 1;
@@ -34,6 +43,8 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
     private ArrayList<String> mSelectPath = null;
     private ImageView ivImgDesc;
     private EditText edtPondName, edtPondDesc;
+    private String pondName, pondDesc;
+    private SweetAlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,46 +117,106 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
     }
 
     private void addPond() {
-        if (edtPondName.getText().toString().trim().isEmpty()) {
+        //没有登录就不能添加
+        if (!myTool.isLoginWithDialog()) {
+            return;
+        }
+
+        pondName = edtPondName.getText().toString().trim();
+        pondDesc = edtPondDesc.getText().toString();
+
+        if (pondName.isEmpty()) {
             //震动View
             YoYo.with(Techniques.Shake)
                     .duration(700)
                     .playOn(edtPondName);
-            myTool.showInfo("还没有添加池塘名字哦！");
             return;
         }
-        if (edtPondDesc.getText().toString().trim().isEmpty()) {
+
+        if (pondDesc.isEmpty()) {
             YoYo.with(Techniques.Shake)
                     .duration(700)
                     .playOn(edtPondDesc);
-            myTool.showInfo("还没有池塘描述唷！");
             return;
         }
 
-        //添加池塘信息,成功的提示对话框
-        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("添加成功!")
-                .setContentText("你的鱼塘尽在掌握之中!")
-                .setConfirmText("完  成")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        mDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("正在添加···");
+        mDialog.show();
+
+        File pondFile = null;
+        if (mSelectPath == null) {
+            pondFile = myTool.getDefaultPondImg();
+        } else {
+            if (mSelectPath.size() != 0) {
+                pondFile = new File(mSelectPath.get(0));
+            } else {
+                pondFile = myTool.getDefaultPondImg();
+            }
+        }
+
+        Log.i(TAG, "addPond: " + pondFile.toString());
+
+        String url = ConstantValue.SERVICE_ADDRESS + "addPond";
+        Log.i(TAG, "addPond: pondName[" + pondName + "],pondDesc[" + pondDesc + "],userId[" + myTool.getUserName() + "]");
+
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("userId", myTool.getUserName())
+                .addParams("pondName", pondName)
+                .addParams("pondDescrible", pondDesc)
+//                .addFile("mFile", pondName + "封面.png", pondFile)
+                .build()
+                .execute(new StringCallback() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                        new CountDownTimer(500, 500) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                finish();
-                            }
-                        }.start();
+                    public void onError(Call call, Exception e, int id) {
+                        mDialog.setTitleText("添加失败")
+                                .setContentText("添加失败，异常信息 e-->[" + e.toString() + "]")
+                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
                     }
-                })
-                .show();
-//        startActivity(new Intent(this, AddSuccessActivity.class));
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        switch (response) {
+                            case "error":
+                                //添加池塘信息,成功的提示对话框
+                                mDialog.setTitleText("添加失败!")
+                                        .setContentText("服务器出现了错误，请稍后再试!")
+                                        .setConfirmText("好  的")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                            }
+                                        }).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                break;
+                            case "success":
+                                //添加池塘信息,成功的提示对话框
+                                mDialog.setTitleText("添加成功!")
+                                        .setContentText("你的鱼塘尽在掌握之中,记得及时回来打理唷! ")
+                                        .setConfirmText("完  成")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                                new CountDownTimer(1000, 1000) {
+                                                    @Override
+                                                    public void onTick(long millisUntilFinished) {
+                                                    }
+
+                                                    @Override
+                                                    public void onFinish() {
+                                                        finish();
+                                                    }
+                                                }.start();
+                                            }
+                                        }).changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                break;
+                        }
+                        //        startActivity(new Intent(this, AddSuccessActivity.class));
+                    }
+                });
     }
 
     @Override

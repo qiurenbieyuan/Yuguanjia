@@ -22,6 +22,12 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.R;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.utils.ConstantValue;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.Call;
 
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
@@ -31,6 +37,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private ImageView ivDelUserName, ivDelPassword, ivDelConPwd;
     private Button btnRegister;
     private String userName, password, confirmPwd;
+    private SweetAlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         llBack.setOnClickListener(this);
         ivDelUserName.setOnClickListener(this);
         ivDelPassword.setOnClickListener(this);
+        ivDelConPwd.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         setTextListener();
     }
@@ -154,17 +162,65 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        YoYo.with(Techniques.BounceInUp)
-                .duration(1000)
-                .withListener(new AnimatorListenerAdapter() {
+//        YoYo.with(Techniques.Bounce)
+//                .duration(1000)
+//                .withListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        super.onAnimationEnd(animation);
+//                        myTool.showInfo("注册成功！");
+//                        finish();
+//                    }
+//                })
+//                .playOn(btnRegister);
+
+        mDialog = null;
+        mDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("正在注册···");
+        mDialog.show();
+
+        String url = ConstantValue.SERVICE_ADDRESS + "register";
+        OkHttpUtils
+                .get()
+                .url(url)
+                .addParams("userId", userName)
+                .addParams("userPwd", password)
+                .build()
+                .execute(new StringCallback() {
                     @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        myTool.showInfo("注册成功！");
-                        finish();
+                    public void onError(Call call, Exception e, int id) {
+                        toOtherCase(e.toString());
                     }
-                })
-                .playOn(btnRegister);
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        switch (response) {
+                            case "success":
+                                toLoginSuccess(response);
+                                break;
+                            case "error":
+                                mDialog.setTitleText("错误")
+                                        .setContentText("用户已存在或其他系统错误！")
+                                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                break;
+                            default:
+                                toOtherCase(response);
+                                break;
+                        }
+                    }
+                });
+    }
+
+    private void toOtherCase(String response) {
+        mDialog.setTitleText("提示")
+                .setContentText("服务器返回的信息：" + response + "！")
+                .changeAlertType(SweetAlertDialog.WARNING_TYPE);
+    }
+
+    private void toLoginSuccess(String response) {
+        mDialog.setTitleText("注册成功")
+                .setContentText("欢迎注册鱼管家，从此开启智能养鱼Style！[" + response + "]")
+                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
     }
 
     private void setTextListener() {
@@ -176,26 +232,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    //没有显示时就不做操作
-                    if (ivDelUserName.getVisibility() == View.GONE) {
-                        ivDelUserName.setVisibility(View.VISIBLE);
-                        YoYo.with(Techniques.ZoomIn)
-                                .duration(700)
-                                .playOn(findViewById(R.id.iv_del_username));
-                    }
-                } else {
-                    YoYo.with(Techniques.ZoomOut)
-                            .duration(700)
-                            .withListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    ivDelUserName.setVisibility(View.GONE);
-                                }
-                            })
-                            .playOn(findViewById(R.id.iv_del_username));
-                }
+                showIvDelByEdt(s, ivDelUserName);
             }
 
             @Override
@@ -210,26 +247,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    //没有显示时就不做操作
-                    if (ivDelPassword.getVisibility() == View.GONE) {
-                        ivDelPassword.setVisibility(View.VISIBLE);
-                        YoYo.with(Techniques.ZoomIn)
-                                .duration(700)
-                                .playOn(findViewById(R.id.iv_del_password));
-                    }
-                } else {
-                    YoYo.with(Techniques.ZoomOut)
-                            .duration(700)
-                            .withListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    ivDelPassword.setVisibility(View.GONE);
-                                }
-                            })
-                            .playOn(findViewById(R.id.iv_del_password));
-                }
+                showIvDelByEdt(s, ivDelPassword);
             }
 
             @Override
@@ -237,5 +255,50 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
             }
         });
+        edtConPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showIvDelByEdt(s, ivDelConPwd);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    /**
+     * 根据输入信息显示删除控件
+     *
+     * @param s
+     * @param ivDel
+     */
+    private void showIvDelByEdt(CharSequence s, final ImageView ivDel) {
+        if (s.length() != 0) {
+            //没有显示时就不做操作
+            if (ivDel.getVisibility() == View.GONE) {
+                ivDel.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.ZoomIn)
+                        .duration(700)
+                        .playOn(ivDel);
+            }
+        } else {
+            YoYo.with(Techniques.ZoomOut)
+                    .duration(700)
+                    .withListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            ivDel.setVisibility(View.GONE);
+                        }
+                    })
+                    .playOn(ivDel);
+        }
     }
 }

@@ -4,6 +4,7 @@
 package com.qican.ygj.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,63 +13,113 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.R;
+import com.qican.ygj.bean.Pond;
+import com.qican.ygj.ui.adapter.CommonAdapter;
+import com.qican.ygj.ui.adapter.ViewHolder;
+import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
+import com.qican.ygj.utils.ConstantValue;
+import com.qican.ygj.utils.YGJDatas;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import me.nereo.multi_image_selector.MultiImageSelector;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class AddCameraActivity extends Activity implements View.OnClickListener {
-    private static final int IMAGE_REQUEST_CODE = 1;
-    private static final String TAG = "AddPondActivity";
-    private LinearLayout llBack, llAddPond;
-    private ImageView ivAddimg, ivClose;
+    private static final String TAG = "AddCameraActivity";
+    private LinearLayout llBack, llAddCamera;
+    private ImageView ivScan;
     private CommonTools myTool;
-    private ArrayList<String> mSelectPath = null;
-    private ImageView ivImgDesc;
-    private EditText edtPondName, edtPondDesc;
+    private EditText edtCameraName;
+    private ListView mListView;
+    private List<Pond> mDatas;
+    private PondAdapter mAdpater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addpond);
+        setContentView(R.layout.activity_addcamera);
         initView();
         initEvent();
-        initImageSelCon();
     }
 
-    private void initImageSelCon() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 
+    private void initData() {
+//        mDatas = YGJDatas.getPondsDatas();
+        mDatas = new ArrayList<>();
+
+        String url = ConstantValue.SERVICE_ADDRESS + "findPondByUser";
+        Log.i(TAG, "addPond: userId[" + myTool.getUserId() + "]");
+
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("userId", myTool.getUserId())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.i(TAG, "onResponse: " + response);
+
+                        JSONArray jsonArray = JSONArray.fromObject(response);
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject ob = jsonArray.getJSONObject(i);
+                            Pond pond = new Pond();
+
+                            pond.setId(ob.getString("pondId"));
+                            pond.setName(ob.getString("pondName"));
+                            pond.setDesc(ob.getString("pondDescrible"));
+
+                            mDatas.add(pond);
+                        }
+                        mAdpater = new PondAdapter(AddCameraActivity.this, mDatas, R.layout.item_choose_pond);
+                        mListView.setAdapter(mAdpater);
+                    }
+                });
     }
 
     private void initView() {
         llBack = (LinearLayout) findViewById(R.id.ll_back);
-        llAddPond = (LinearLayout) findViewById(R.id.ll_add);
+        llAddCamera = (LinearLayout) findViewById(R.id.ll_add);
 
-        ivAddimg = (ImageView) findViewById(R.id.iv_addimg);
-        ivImgDesc = (ImageView) findViewById(R.id.iv_imgdesc);
-        ivClose = (ImageView) findViewById(R.id.iv_close);
-
-        edtPondName = (EditText) findViewById(R.id.edt_pond_name);
-        edtPondDesc = (EditText) findViewById(R.id.edt_pond_desc);
+        edtCameraName = (EditText) findViewById(R.id.edt_camera_name);
+        ivScan = (ImageView) findViewById(R.id.iv_scan);
+        mListView = (ListView) findViewById(R.id.lv_mypond);
 
         myTool = new CommonTools(this);
     }
 
     private void initEvent() {
         llBack.setOnClickListener(this);
-        llAddPond.setOnClickListener(this);
-
-        ivAddimg.setOnClickListener(this);
-        ivImgDesc.setOnClickListener(this);
-        ivClose.setOnClickListener(this);
+        llAddCamera.setOnClickListener(this);
+        ivScan.setOnClickListener(this);
     }
 
     @Override
@@ -77,48 +128,29 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
             case R.id.ll_back:
                 finish();
                 break;
-            case R.id.iv_addimg:
-                // 跳转到图片选择器
-                MultiImageSelector.create(this)
-                        .showCamera(true) // show camera or not. true by default
-                        .single() // single mode
-                        .origin(mSelectPath) // original select data set, used width #.multi()
-                        .start(this, IMAGE_REQUEST_CODE);
-                break;
-            case R.id.iv_imgdesc:
-                Bundle bundle = new Bundle();
-                bundle.putString("path", mSelectPath.get(0));
-                Intent intent = new Intent(this, PreviewActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-            case R.id.iv_close:
-                ivImgDesc.setVisibility(View.GONE);
-                ivClose.setVisibility(View.GONE);
-                ivAddimg.setVisibility(View.VISIBLE);
-                mSelectPath.clear();//去除照片地址信息
-                break;
             case R.id.ll_add:
-                //添加池塘
-                addPond();
+                //添加相机
+                addCamera();
+                break;
+            case R.id.iv_scan:
+                startActivity(new Intent(this, CaptureActivity.class));
                 break;
         }
     }
 
-    private void addPond() {
-        if (edtPondName.getText().toString().trim().isEmpty()) {
+    private void addCamera() {
+        if (edtCameraName.getText().toString().trim().isEmpty()) {
             //震动View
             YoYo.with(Techniques.Shake)
                     .duration(700)
-                    .playOn(edtPondName);
-            myTool.showInfo("还没有添加池塘名字哦！");
-            return;
-        }
-        if (edtPondDesc.getText().toString().trim().isEmpty()) {
-            YoYo.with(Techniques.Shake)
-                    .duration(700)
-                    .playOn(edtPondDesc);
-            myTool.showInfo("还没有池塘描述唷！");
+                    .withListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            edtCameraName.setError("还没有添加池塘名字哦！");
+                        }
+                    })
+                    .playOn(edtCameraName);
             return;
         }
 
@@ -145,37 +177,53 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
                     }
                 })
                 .show();
-//        startActivity(new Intent(this, AddSuccessActivity.class));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // 图片选择结果回调
-        if (requestCode == IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Get the result list of select image paths
-                mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                // do your logic ....
-                Log.i(TAG, "path: " + mSelectPath.toString());
-                showImageByPath(mSelectPath);
+    class PondAdapter extends CommonAdapter<Pond> {
+
+        public PondAdapter(Context context, List<Pond> mDatas, int itemLayoutId) {
+            super(context, mDatas, itemLayoutId);
+        }
+
+        @Override
+        public void convert(ViewHolder helper, final Pond item) {
+            RelativeLayout rlItem = helper.getView(R.id.rl_item);
+
+            helper.setText(R.id.tv_pond_name, item.getName())
+                    .setText(R.id.tvpond_desc, item.getDesc());
+            if (item.getImgUrl() != null) {
+                helper.setImageByUrl(R.id.iv_pond_img, item.getImgUrl());
             }
+
+            rlItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String url = ConstantValue.SERVICE_ADDRESS + "uploadPondHeadImage";
+                    Log.i(TAG, "addPond: userId[" + myTool.getUserId() + "]");
+
+                    myTool.showInfo("pondId[" + item.getId() + "]");
+
+                    OkHttpUtils
+                            .post()
+                            .url(url)
+                            .addParams("pondId", item.getId())
+                            .addFile("mFile", "pond_" + item.getId() + ".png", myTool.getDefaultPondImg())
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    myTool.showInfo("response[" + e.toString() + "]");
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    myTool.showInfo("response[" + response + "]");
+                                }
+                            });
+                }
+            });
         }
     }
 
-    /**
-     * 显示池塘封面图片到图片预览上
-     *
-     * @param mSelectPath
-     */
-    private void showImageByPath(ArrayList<String> mSelectPath) {
-        if (mSelectPath != null) {
-            if (mSelectPath.size() != 0) {
-                ivImgDesc.setVisibility(View.VISIBLE);
-                ivAddimg.setVisibility(View.GONE);
-                ivClose.setVisibility(View.VISIBLE);
-                Glide.with(this).load(mSelectPath.get(0)).into(ivImgDesc);
-            }
-        }
-    }
 }

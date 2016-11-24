@@ -115,19 +115,19 @@
         android:padding="15dp">
 
         <ImageView
-            android:id="@+id/iv_pond_name"
+            android:id="@+id/iv_camera_name"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:src="@drawable/camera_name" />
 
         <EditText
-            android:id="@+id/edt_pond_name"
+            android:id="@+id/edt_camera_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/iv_pond_name"
+            android:layout_toRightOf="@id/iv_camera_name"
             android:hint="请给相机起个名吧"
             android:singleLine="true"
             android:textColor="#444"
@@ -147,18 +147,18 @@
     <ListView
         android:id="@+id/lv_mypond"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_selector"
-        android:divider="@color/gray_bg"
-        android:dividerHeight="0.1dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:divider="@null"
+        android:dividerHeight="8dp" />
 
     <RelativeLayout
         android:id="@+id/rl_nopond"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_nodata"

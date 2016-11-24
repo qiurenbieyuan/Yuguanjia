@@ -8,7 +8,27 @@ public class Camera {
     private String name; //镜头命名
 
     private String pondId; //属于哪个池塘
+
     private EZCameraInfo cameraInfo; //萤石提供的摄像头信息
+
+    private String deviceSerial;
+    private String location;
+    private String cameraNo;
+
+    public Camera() {
+
+    }
+
+    public Camera(com.qican.ygj.beanfromzhu.Camera camera) {
+        this.setId(camera.getCameraId());
+        this.setPreImgUrl(camera.getCameraImgUrl());
+        this.setName(camera.getCameraName());
+
+        this.setPondId(camera.getPondId());
+        this.setDeviceSerial(camera.getDeviceSerial());
+        this.setLocation(camera.getCameraLocation());
+        this.setCameraNo(camera.getCameraNo());
+    }
 
     public String getId() {
         return id;
@@ -48,5 +68,29 @@ public class Camera {
 
     public void setCameraInfo(EZCameraInfo cameraInfo) {
         this.cameraInfo = cameraInfo;
+    }
+
+    public String getDeviceSerial() {
+        return deviceSerial;
+    }
+
+    public void setDeviceSerial(String deviceSerial) {
+        this.deviceSerial = deviceSerial;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCameraNo() {
+        return cameraNo;
+    }
+
+    public void setCameraNo(String cameraNo) {
+        this.cameraNo = cameraNo;
     }
 }

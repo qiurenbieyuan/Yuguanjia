@@ -20,6 +20,7 @@
     <dimen name="assistant_text_size">14sp</dimen>
 
     <dimen name="roundBtnRadius">30dip</dimen>
+    <dimen name="roundItemRadius">3dip</dimen>
     <dimen name="btnStroke">0.5dp</dimen>
 
 </resources>
