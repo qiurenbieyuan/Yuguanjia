@@ -8,7 +8,11 @@
  */
 package com.qican.ygj;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -27,17 +31,20 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
 
-public class YGJApp extends Application {
+public class YGJApp extends Application implements Thread.UncaughtExceptionHandler {
     //萤石APPKEY
     public static final String EZ_appKey = "db6b68c3975b4e8f932e752753b08e47";
     //so库存放位置
     public static final String loadLibraryAbsPath = Environment.getExternalStorageDirectory() + "/"
             + "YGJ/libs/";
     private CommonTools myTool;
+    private static Context mContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mContext = getApplicationContext();
         myTool = new CommonTools(this);
         //初始化ImageLoader
         initUIL();
@@ -82,5 +89,23 @@ public class YGJApp extends Application {
                 .denyCacheImageMultipleSizesInMemory()
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    private void restart() {
+        Intent i = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName());
+        PendingIntent pi = PendingIntent.getActivity(mContext, 0, i, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, pi);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+    @Override
+    public void uncaughtException(Thread thread, Throwable ex) {
+        //程序奔溃重启
+        restart();
     }
 }

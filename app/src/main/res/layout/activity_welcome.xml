@@ -38,19 +38,17 @@
     <ImageView
         android:id="@+id/iv_welcome"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/title"
-        android:visibility="gone" />
+        android:src="@mipmap/title" />
 
     <ImageView
         android:id="@+id/iv_alog"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        android:src="@mipmap/alog"
-        android:visibility="gone" />
+        android:src="@mipmap/alog" />
 
 </RelativeLayout>

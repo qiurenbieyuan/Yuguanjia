@@ -1,6 +1,8 @@
 package com.qican.ygj.bean;
 
-public class Pond {
+import java.io.Serializable;
+
+public class Pond implements Serializable {
     private String id;
     private String name;
     private String imgUrl;

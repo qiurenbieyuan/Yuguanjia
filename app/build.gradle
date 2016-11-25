@@ -50,10 +50,14 @@ dependencies {
     compile 'me.xiaopan:sketch:2.3.0-beta5'
     compile files('libs/zxing.jar')
     compile 'cn.pedant.sweetalert:library:1.3'
+    //okhttp
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
     //动画
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.1@aar'
     compile 'com.daimajia.androidanimations:library:1.1.3@aar'
     // Http请求
     compile 'com.zhy:okhttputils:2.6.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

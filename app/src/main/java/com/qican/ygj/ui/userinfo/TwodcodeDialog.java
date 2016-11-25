@@ -67,10 +67,10 @@ public class TwodcodeDialog extends Dialog implements View.OnClickListener {
         if (mContext != null && !((Activity) mContext).isFinishing()) {
             try {
                 super.show();
+                initData();
             } catch (Exception e) {
             }
         }
-
     }
 
     @Override

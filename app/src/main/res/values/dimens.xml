@@ -22,5 +22,7 @@
     <dimen name="roundBtnRadius">30dip</dimen>
     <dimen name="roundItemRadius">3dip</dimen>
     <dimen name="btnStroke">0.5dp</dimen>
+    
+    <dimen name="textsize_normal">16sp</dimen>
 
 </resources>

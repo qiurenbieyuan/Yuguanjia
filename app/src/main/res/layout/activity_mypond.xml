@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_bg"
+    android:background="@color/gray"
     android:orientation="vertical">
 
     <!-- 顶部titleBar-->
@@ -41,12 +41,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="修改签名"
+            android:text="我的池塘"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
         <LinearLayout
-            android:id="@+id/ll_save"
+            android:id="@+id/ll_add"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -60,58 +60,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="保存"
+                android:paddingRight="10dp"
+                android:text="刷新"
                 android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <!--历史和收货地址-->
+    <ListView
+        android:id="@+id/lv_mypond"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:divider="@null"
+        android:dividerHeight="8dp" />
 
+    <RelativeLayout
+        android:id="@+id/rl_nopond"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
 
-        <!-- 昵称-->
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_nodata"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/nodata" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
+            android:layout_below="@id/iv_nodata"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="还没有池塘哦，点击添加"
+            android:textColor="@color/text_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
-            <EditText
-                android:id="@+id/edt_autograph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:hint="请输入签名"
-                android:maxLines="7"
-                android:textColor="#444"
-                android:textColorHint="#999"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/gray_bg" />
-
-        <!-- 昵称-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="一个好的签名可以让你的朋友更多地了解你。"
-                android:textColor="#999"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-    </LinearLayout>
 </LinearLayout>

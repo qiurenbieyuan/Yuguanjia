@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/gray_bg"
     android:orientation="vertical">
-
     <!-- 顶部titleBar-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="修改签名"
+            android:text="修改名称"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -80,12 +79,13 @@
             android:padding="15dp">
 
             <EditText
-                android:id="@+id/edt_autograph"
+                android:id="@+id/edt_pond_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:hint="请输入签名"
-                android:maxLines="7"
+                android:ellipsize="end"
+                android:hint="请输入名称"
+                android:singleLine="true"
                 android:textColor="#444"
                 android:textColorHint="#999"
                 android:textSize="15sp" />
@@ -108,10 +108,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="一个好的签名可以让你的朋友更多地了解你。"
+                android:text="为池塘命名可以让你更方便地管理池塘哦！"
                 android:textColor="#999"
                 android:textSize="14sp" />
-
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

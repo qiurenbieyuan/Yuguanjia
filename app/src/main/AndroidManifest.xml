@@ -43,6 +43,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
 
+        <meta-data
+            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+            android:value="GlideModule" />
+
         <activity
             android:name=".ui.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -104,6 +108,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.userinfo.SignatureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mypond.MyPondActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mypond.PondInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".ui.mypond.PondNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mypond.PondDescActivity"
             android:screenOrientation="portrait" />
 
         <!--Image Selector Entry-->

@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="修改签名"
+            android:text="池塘详情"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -80,11 +80,11 @@
             android:padding="15dp">
 
             <EditText
-                android:id="@+id/edt_autograph"
+                android:id="@+id/edt_pond_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:hint="请输入签名"
+                android:hint="请输入池塘的详细信息"
                 android:maxLines="7"
                 android:textColor="#444"
                 android:textColorHint="#999"
@@ -108,7 +108,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="一个好的签名可以让你的朋友更多地了解你。"
+                android:text="池塘的详情能让你更好的把控池塘哦！"
                 android:textColor="#999"
                 android:textSize="14sp" />
 

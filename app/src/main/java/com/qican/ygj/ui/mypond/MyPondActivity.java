@@ -1,7 +1,7 @@
 /**
- * 添加池塘
+ * 查看我的池塘
  */
-package com.qican.ygj.ui;
+package com.qican.ygj.ui.mypond;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,14 +22,13 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Pond;
+import com.qican.ygj.listener.BeanCallBack;
 import com.qican.ygj.ui.adapter.CommonAdapter;
 import com.qican.ygj.ui.adapter.ViewHolder;
 import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
-import com.qican.ygj.utils.YGJDatas;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import net.sf.json.JSONArray;
@@ -40,23 +39,19 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
-import okhttp3.Response;
 
-public class AddCameraActivity extends Activity implements View.OnClickListener {
-    private static final String TAG = "AddCameraActivity";
+public class MyPondActivity extends Activity implements View.OnClickListener {
+    private static final String TAG = "MyPondActivity";
     private LinearLayout llBack, llAddCamera;
-    private ImageView ivScan;
     private CommonTools myTool;
-    private EditText edtCameraName;
     private ListView mListView;
     private List<Pond> mDatas;
     private PondAdapter mAdpater;
-    private String selectedPondId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addcamera);
+        setContentView(R.layout.activity_mypond);
         initView();
         initEvent();
     }
@@ -79,28 +74,20 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
                 .url(url)
                 .addParams("userId", myTool.getUserId())
                 .build()
-                .execute(new StringCallback() {
+                .execute(new BeanCallBack<List<com.qican.ygj.beanfromzhu.Pond>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+
 
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.i(TAG, "onResponse: " + response);
-
-                        JSONArray jsonArray = JSONArray.fromObject(response);
-                        for (int i = 0; i < jsonArray.size(); i++) {
-                            JSONObject ob = jsonArray.getJSONObject(i);
-                            Pond pond = new Pond();
-                            pond.setId(ob.getString("pondId"));
-                            pond.setName(ob.getString("pondName"));
-                            pond.setDesc(ob.getString("pondDescrible"));
-                            pond.setImgUrl(ob.getString("pondImageUrl"));
-
+                    public void onResponse(List<com.qican.ygj.beanfromzhu.Pond> pondList, int id) {
+                        for (int i = 0; i < pondList.size(); i++) {
+                            Pond pond = new Pond(pondList.get(i));
                             mDatas.add(pond);
                         }
-                        mAdpater = new PondAdapter(AddCameraActivity.this, mDatas, R.layout.item_choose_pond);
+                        mAdpater = new PondAdapter(MyPondActivity.this, mDatas, R.layout.item_choose_pond);
                         mListView.setAdapter(mAdpater);
                     }
                 });
@@ -110,8 +97,6 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llAddCamera = (LinearLayout) findViewById(R.id.ll_add);
 
-        edtCameraName = (EditText) findViewById(R.id.edt_camera_name);
-        ivScan = (ImageView) findViewById(R.id.iv_scan);
         mListView = (ListView) findViewById(R.id.lv_mypond);
 
         myTool = new CommonTools(this);
@@ -120,7 +105,6 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
     private void initEvent() {
         llBack.setOnClickListener(this);
         llAddCamera.setOnClickListener(this);
-        ivScan.setOnClickListener(this);
     }
 
     @Override
@@ -131,7 +115,6 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.ll_add:
                 //添加相机
-                addCamera();
                 break;
             case R.id.iv_scan:
                 startActivity(new Intent(this, CaptureActivity.class));
@@ -139,46 +122,6 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    private void addCamera() {
-        if (edtCameraName.getText().toString().trim().isEmpty()) {
-            //震动View
-            YoYo.with(Techniques.Shake)
-                    .duration(700)
-                    .withListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            edtCameraName.setError("还没有添加池塘名字哦！");
-                        }
-                    })
-                    .playOn(edtCameraName);
-            return;
-        }
-
-        //添加池塘信息,成功的提示对话框
-        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("添加成功!")
-                .setContentText("你的鱼塘尽在掌握之中!")
-                .setConfirmText("完  成")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                        new CountDownTimer(500, 500) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                finish();
-                            }
-                        }.start();
-                    }
-                })
-                .show();
-    }
 
     class PondAdapter extends CommonAdapter<Pond> {
 
@@ -201,10 +144,18 @@ public class AddCameraActivity extends Activity implements View.OnClickListener 
             rlItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectedPondId = item.getId();
+                    toPondInfoActivity(item);
                 }
             });
         }
     }
 
+    /**
+     * 启动详细页面
+     *
+     * @param pond
+     */
+    private void toPondInfoActivity(Pond pond) {
+        myTool.startActivity(pond, PondInfoActivity.class);
+    }
 }

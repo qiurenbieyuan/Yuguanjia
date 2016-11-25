@@ -50,7 +50,7 @@
     <color name="yahei">#626262</color>
     <color name="articletext_backcolor">#f7f7f7</color>
     <color name="trans_bg_color">#c0ffffff</color>
-    <color name="gray_bg">#ffe5e7e9</color>
+    <color name="gray_bg">#f0f0f0</color>
     <color name="unopen">#748dac</color>
     <!-- scan color -->
     <color name="viewfinder_frame">#929292</color>

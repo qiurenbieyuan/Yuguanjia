@@ -15,13 +15,14 @@ import android.widget.RelativeLayout;
 import com.qican.ygj.R;
 import com.qican.ygj.ui.setting.AboutActivity;
 import com.qican.ygj.utils.CommonTools;
+import com.videogo.openapi.EZOpenSDK;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SettingsActivity extends Activity implements View.OnClickListener {
     private CommonTools myTool;
     private LinearLayout llBack;
-    private RelativeLayout rlFeedback, rlAbout, rlService, rlComQuestion;
+    private RelativeLayout rlFeedback, rlAbout, rlService, rlComQuestion, rlExitEZ;
     private RelativeLayout rlExit;
 
     @Override
@@ -45,6 +46,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         rlAbout.setOnClickListener(this);
         rlComQuestion.setOnClickListener(this);
         rlService.setOnClickListener(this);
+        rlExitEZ.setOnClickListener(this);
     }
 
     private void initView() {
@@ -54,6 +56,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         rlAbout = (RelativeLayout) findViewById(R.id.rl_about);
         rlComQuestion = (RelativeLayout) findViewById(R.id.rl_comquestion);
         rlService = (RelativeLayout) findViewById(R.id.rl_service);
+        rlExitEZ = (RelativeLayout) findViewById(R.id.rl_exitez);
 
         myTool = new CommonTools(this);
     }
@@ -133,6 +136,17 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.rl_about:
                 myTool.startActivity(AboutActivity.class);
+                break;
+            case R.id.rl_exitez:
+                // 注销萤石账号
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        EZOpenSDK.getInstance().logout();
+                    }
+                }.start();
+                myTool.showInfo("您已注销萤石账户！");
                 break;
         }
     }

@@ -19,7 +19,8 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/selected" />
+        android:src="@drawable/selected"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_content"

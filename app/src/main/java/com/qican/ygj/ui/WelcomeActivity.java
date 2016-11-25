@@ -53,6 +53,7 @@ public class WelcomeActivity extends Activity {
 
     private void toMain() {
         findViewById(R.id.iv_welcome).setVisibility(View.VISIBLE);
+        findViewById(R.id.iv_alog).setVisibility(View.GONE);
         //动画
         YoYo.with(Techniques.Landing)
                 .withListener(new AnimatorListenerAdapter() {

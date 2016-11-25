@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.qican.ygj.R;
 import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.ui.login.LoginActivity;
+import com.qican.ygj.ui.mypond.MyPondActivity;
 import com.qican.ygj.ui.userinfo.MyInfoActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
@@ -113,24 +114,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 myTool.startActivity(MyInfoActivity.class);
                 break;
             case R.id.rl_mypond:
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("我的池塘")
-                        .setContentText("注销萤石账号？")
-                        .setConfirmText("是的，注销！")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                                new Thread() {
-                                    @Override
-                                    public void run() {
-                                        super.run();
-                                        EZOpenSDK.getInstance().logout();
-                                    }
-                                }.start();
-                            }
-                        })
-                        .show();
+                myTool.startActivity(MyPondActivity.class);
                 break;
             case R.id.rl_mycamera:
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)

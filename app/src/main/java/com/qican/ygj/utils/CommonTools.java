@@ -12,8 +12,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
@@ -21,15 +24,24 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.qican.ygj.R;
+import com.qican.ygj.bean.Pond;
 import com.qican.ygj.bean.Pump;
+import com.qican.ygj.listener.LoggingListener;
 import com.qican.ygj.task.CommonTask;
 import com.qican.ygj.ui.SettingsActivity;
 import com.qican.ygj.ui.login.LoginActivity;
+import com.qican.ygj.ui.mypond.PondInfoActivity;
+import com.squareup.picasso.Picasso;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.File;
+import java.io.Serializable;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.Call;
 
 public class CommonTools {
 
@@ -105,10 +117,39 @@ public class CommonTools {
      * @param imageView
      */
     public CommonTools showImage(String url, ImageView imageView) {
-
-        Glide.with(mContext).load(url).centerCrop().error(R.drawable.defaultimage)
+//        Picasso.with(mContext).load(url).into(imageView);
+        Glide.with(mContext).load(url).listener(new LoggingListener<String, GlideDrawable>()).centerCrop()
                 .crossFade().into(imageView);
+//        Glide.with(mContext).load(url).centerCrop().error(R.drawable.defaultimage)
+//                .crossFade().into(imageView);
+        return this;
+    }
 
+    public CommonTools showImage(String url, ImageView imageView, @DrawableRes int errRes) {
+        Glide.with(mContext)
+                .load(url)
+                .listener(new LoggingListener<String, GlideDrawable>())
+                .centerCrop().error(errRes)
+                .crossFade().into(imageView);
+        return this;
+    }
+
+    public CommonTools showImageByOkHttp(String url, final ImageView imageView) {
+        OkHttpUtils
+                .get()//
+                .url(url)//
+                .build()//
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showInfo("异常：" + e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap, int id) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
         return this;
     }
 
@@ -161,6 +202,49 @@ public class CommonTools {
     }
 
     /**
+     * 带参数的启动
+     *
+     * @param o
+     * @param activity
+     * @return
+     */
+    public CommonTools startActivity(Serializable o, Class<?> activity) {
+        try {
+            //跳转到详细信息界面
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(o.getClass().getName(), o);
+            Intent intent = new Intent(mContext, activity);
+            intent.putExtras(bundle);
+
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("异常！")
+                    .setContentText("启动Activity失败！[e:" + e.toString() + "]")
+                    .setConfirmText("确  定!")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+        }
+        return this;
+    }
+
+    /**
+     * 得到上一页面传递过来的参数
+     *
+     * @param o
+     * @return
+     */
+    public Serializable getParam(@NonNull Serializable o) {
+        Bundle bundle = ((Activity) mContext).getIntent().getExtras();
+        return (Serializable) bundle.get(o.getClass().getName());
+    }
+
+    /**
      * 启动activity,得到返回结果
      *
      * @param activity
@@ -181,6 +265,38 @@ public class CommonTools {
                     })
                     .show();
         }
+    }
+
+    /**
+     * 带参数的启动
+     *
+     * @param o
+     * @param activity
+     * @return
+     */
+    public CommonTools startActivityForResult(Serializable o, Class<?> activity, int requestCode) {
+        try {
+            //跳转到详细信息界面
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(o.getClass().getName(), o);
+            Intent intent = new Intent(mContext, activity);
+            intent.putExtras(bundle);
+
+            ((Activity) mContext).startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("异常！")
+                    .setContentText("启动Activity失败！[e:" + e.toString() + "]")
+                    .setConfirmText("确  定!")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+        }
+        return this;
     }
 
     /**

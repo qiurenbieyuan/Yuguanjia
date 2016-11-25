@@ -4,45 +4,62 @@
     android:layout_height="match_parent"
     android:background="@color/gray_bg"
     android:orientation="vertical">
-    <!-- 顶部titleBar-->
+
     <RelativeLayout
+        android:id="@+id/rl_pond_info"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/main_color">
+        android:layout_height="220dp"
+        android:background="@color/black">
 
-        <LinearLayout
-            android:id="@+id/ll_back"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/iv_pond_img"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/btn_selector_title"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:background="@mipmap/defaultpondimg" />
 
-            <ImageView
-                style="@style/Icon_back"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/back" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingRight="10dp"
-                android:text="返回"
-                android:textColor="@color/white" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_nodata"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/nodata" />
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="设置"
+            android:layout_below="@id/iv_nodata"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="啊哦，暂无预览！"
+            android:textColor="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/tv_pond_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#88000000"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:padding="15dp"
+            android:text="this is the pond detial info!"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/textsize_normal" />
+
+        <RelativeLayout
+            android:id="@+id/rl_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#88000000"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -54,130 +71,7 @@
 
         <!-- 昵称-->
         <RelativeLayout
-            android:id="@+id/rl_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
-
-            <ImageView
-                android:id="@+id/iv_help"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/feedback" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_help"
-                android:text="意见反馈"
-                android:textColor="#444" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/arrowright" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/gray_bg" />
-
-        <!-- 学递号-->
-        <RelativeLayout
-            android:id="@+id/rl_comquestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
-
-            <ImageView
-                android:id="@+id/iv_comquestion"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/comquestion" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/arrowright" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_comquestion"
-                android:text="常见问题"
-                android:textColor="#444" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/gray_bg" />
-
-        <!-- 昵称-->
-        <RelativeLayout
-            android:id="@+id/rl_service"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:padding="15dp">
-
-            <ImageView
-                android:id="@+id/iv_service"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/myservice" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/arrowright" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_service"
-                android:text="客服在线"
-                android:textColor="#444" />
-
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-        <!-- 昵称-->
-        <RelativeLayout
-            android:id="@+id/rl_about"
+            android:id="@+id/rl_pond_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_selector"
@@ -188,7 +82,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/about" />
+                android:src="@drawable/pondname" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -196,7 +90,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/iv_about"
-                android:text="关于"
+                android:text="池塘名称"
                 android:textColor="#444" />
 
             <ImageView
@@ -209,15 +103,14 @@
                 android:src="@drawable/arrowright" />
 
             <TextView
-                android:id="@+id/tv_sex"
+                android:id="@+id/tv_pond_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/iv_arrowright_sex"
-                android:text="鱼管家 v1.0.0"
+                android:text="长寿湖1路"
                 android:textColor="#999" />
-
         </RelativeLayout>
 
         <View
@@ -229,35 +122,52 @@
 
         <!-- 昵称-->
         <RelativeLayout
-            android:id="@+id/rl_exitez"
+            android:id="@+id/rl_pond_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_selector"
             android:padding="15dp">
 
             <ImageView
-                android:id="@+id/iv_exitez"
+                android:id="@+id/iv_pond_desc"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/ez_logo" />
+                android:src="@drawable/desc" />
 
             <TextView
+                android:id="@+id/tv_menu_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_exitez"
-                android:text="退出萤石账号"
+                android:layout_toRightOf="@id/iv_pond_desc"
+                android:text="池塘描述"
                 android:textColor="#444" />
 
             <ImageView
+                android:id="@+id/iv_arrowright_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/arrowright" />
+
+            <TextView
+                android:id="@+id/tv_pond_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/iv_arrowright_desc"
+                android:layout_toRightOf="@id/tv_menu_desc"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:singleLine="true"
+                android:text="该池塘年产150斤翘壳鱼！"
+                android:textColor="#999" />
         </RelativeLayout>
 
         <View
@@ -269,29 +179,30 @@
 
         <!-- 昵称-->
         <RelativeLayout
-            android:id="@+id/rl_exit"
+            android:id="@+id/rl_modify_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_selector"
             android:padding="15dp">
 
             <ImageView
-                android:id="@+id/iv_exit"
+                android:id="@+id/iv_modify_cover"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/exitapp" />
+                android:src="@drawable/about" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_exit"
-                android:text="注销当前账户"
+                android:layout_toRightOf="@id/iv_modify_cover"
+                android:text="修改池塘封面"
                 android:textColor="#444" />
 
             <ImageView
+                android:id="@+id/iv_arrowright_modify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -301,4 +212,101 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <!-- 昵称-->
+        <RelativeLayout
+            android:id="@+id/rl_pond_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/iv_pond_location"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/location" />
+
+            <TextView
+                android:id="@+id/tv_menu_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/iv_pond_location"
+                android:text="池塘位置"
+                android:textColor="#444" />
+
+            <ImageView
+                android:id="@+id/iv_arrowright_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/arrowright" />
+
+            <TextView
+                android:id="@+id/tv_pond_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/iv_arrowright_loc"
+                android:layout_toRightOf="@id/tv_menu_location"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:singleLine="true"
+                android:text="长寿湖区XX路XX号！"
+                android:textColor="#999" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/gray_bg" />
+
+        <!-- 昵称-->
+        <RelativeLayout
+            android:id="@+id/rl_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_selector"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/camera" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/iv_camera"
+                android:text="查看所有机位"
+                android:textColor="#444" />
+
+            <ImageView
+                android:id="@+id/iv_arrowright_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/arrowright" />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -5,9 +5,6 @@ package com.qican.ygj.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -26,7 +23,6 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -157,16 +153,17 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
 
         Log.i(TAG, "addPond: " + pondFile.toString());
 
-        String url = ConstantValue.SERVICE_ADDRESS + "addPond";
+        String url = ConstantValue.SERVICE_ADDRESS + "uploadPondHeadImage";
         Log.i(TAG, "addPond: pondName[" + pondName + "],pondDesc[" + pondDesc + "],userId[" + myTool.getUserName() + "]");
 
+        //上传池塘头像
         OkHttpUtils
                 .post()
                 .url(url)
                 .addParams("userId", myTool.getUserName())
                 .addParams("pondName", pondName)
                 .addParams("pondDescrible", pondDesc)
-//                .addFile("mFile", pondName + "封面.png", pondFile)
+                .addFile("mFile", pondName + "封面.png", pondFile)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -213,8 +210,18 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
                                             }
                                         }).changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                 break;
+                            default:
+                                //添加池塘信息,成功的提示对话框
+                                mDialog.setTitleText("其他信息："+response)
+                                        .setConfirmText("完  成")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                            }
+                                        }).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                break;
                         }
-                        //        startActivity(new Intent(this, AddSuccessActivity.class));
                     }
                 });
     }

@@ -13,9 +13,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Pond;
 import com.qican.ygj.bean.PostResult;
+import com.qican.ygj.listener.BeanCallBack;
 import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.listener.OnTaskListener;
 import com.qican.ygj.task.CommonTask;
@@ -24,6 +26,7 @@ import com.qican.ygj.ui.adapter.ViewHolder;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.Response;
 
 
 public class PondFragment extends Fragment implements OnTaskListener {
@@ -54,9 +58,13 @@ public class PondFragment extends Fragment implements OnTaskListener {
         View view = inflater.inflate(R.layout.fragment_pond, container, false);
 
         initView(view);
-        initData();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 
     @Override
@@ -70,6 +78,15 @@ public class PondFragment extends Fragment implements OnTaskListener {
     private void initData() {
         mData = new ArrayList<>();
 
+        mLoadPondTask = new LoadPondTask(getActivity(), TASK_LOAD_POND);
+        mLoadPondTask.setOnTaskFinishListener(this);
+        mLoadPondTask.setIvProgress(ivProgress);
+
+        Map<String, String> map = new HashMap<>();
+        mLoadPondTask.execute(map);
+    }
+
+    private void loadPonds() {
         String url = ConstantValue.SERVICE_ADDRESS + "findPondByUser";
         Log.i(TAG, "addPond: userId[" + myTool.getUserId() + "]");
 
@@ -78,25 +95,21 @@ public class PondFragment extends Fragment implements OnTaskListener {
                 .url(url)
                 .addParams("userId", myTool.getUserId())
                 .build()
-                .execute(new StringCallback() {
+                .execute(new BeanCallBack<List<com.qican.ygj.beanfromzhu.Pond>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
 
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.i(TAG, "onResponse: " + response);
+                    public void onResponse(List<com.qican.ygj.beanfromzhu.Pond> ponds, int id) {
+                        for (int i = 0; i < ponds.size(); i++) {
+                            Pond pond = new Pond(ponds.get(i));
+                            mData.add(pond);
+                        }
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
-
-        mLoadPondTask = new LoadPondTask(getActivity(), TASK_LOAD_POND);
-        mLoadPondTask.setOnTaskFinishListener(this);
-        mLoadPondTask.setIvProgress(ivProgress);
-
-        Map<String, String> map = new HashMap<>();
-        mLoadPondTask.execute(map);
-
     }
 
     private void initView(View v) {
@@ -187,9 +200,9 @@ public class PondFragment extends Fragment implements OnTaskListener {
         switch (t.getTaskID()) {
             case TASK_LOAD_POND:
                 mData = (List<Pond>) result;
-
                 mAdapter = new PondAdapter(getActivity(), mData, R.layout.item_pond);
                 mGridView.setAdapter(mAdapter);
+                loadPonds();
                 break;
         }
     }
