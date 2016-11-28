@@ -24,5 +24,6 @@
     <dimen name="btnStroke">0.5dp</dimen>
     
     <dimen name="textsize_normal">16sp</dimen>
+    <dimen name="textsize_small">12sp</dimen>
 
 </resources>

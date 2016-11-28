@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -427,5 +428,41 @@ public class CommonTools {
 
     public String getUserId() {
         return getUserName();
+    }
+
+    public Uri getUserHeadFileUri() {
+
+        File file = new File(USER_FILE_PATH + "/" + getUserId(), "head.jpg");
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        return imageUri;
+    }
+
+    public Uri getPondFileUri() {
+        File file = new File(USER_FILE_PATH + "/" + getUserId(), "pond.jpg");
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
+        return imageUri;
+    }
+
+    /**
+     * 设置性别图标
+     *
+     * @param sex
+     * @param imageView
+     */
+    public CommonTools showSex(String sex, ImageView imageView) {
+        Bitmap female = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.female);
+        Bitmap male = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.male);
+        //设置性别图标
+        switch (sex) {
+            case "男":
+                imageView.setImageBitmap(male);
+                break;
+            case "女":
+                imageView.setImageBitmap(female);
+                break;
+        }
+        return this;
     }
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.qican.ygj.R;
 import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.ui.login.LoginActivity;
 import com.qican.ygj.ui.mypond.MyPondActivity;
+import com.qican.ygj.ui.sysmsg.SysMsgActivity;
 import com.qican.ygj.ui.userinfo.MyInfoActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
@@ -35,7 +37,8 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
     private RelativeLayout rlUserInfo, rlMyPond, rlMyCamera, rlAddPond, rlAddCamera, rlLinkToEZ, rlMyInfo;
     private CircleImageView civHeadImg;
     private ImageView ivMsg, ivSetting;
-    private TextView tvNickName, tvSignature;
+    private TextView tvNickName, tvSignature, tvLogin;
+    private LinearLayout llMsgSetting;
 
     @Nullable
     @Override
@@ -52,7 +55,22 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
+        chooseView();
         initData();
+    }
+
+    private void chooseView() {
+        resetView();
+        if (myTool.isLogin()) {
+            llMsgSetting.setVisibility(View.VISIBLE);
+        } else {
+            tvLogin.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void resetView() {
+        llMsgSetting.setVisibility(View.GONE);
+        tvLogin.setVisibility(View.GONE);
     }
 
     private void initData() {
@@ -60,8 +78,9 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
             civHeadImg.setImageBitmap(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.defaultheadpic));
             return;
         }
-        //显示头像
-        myTool.showImage("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=571129321,501172449&fm=21&gp=0.jpg", civHeadImg);
+        if (!"".equals(myTool.getUserHeadURL())) {
+            myTool.showImage(myTool.getUserHeadURL(), civHeadImg, R.drawable.defaultheadpic);
+        }
         tvNickName.setText(myTool.getNickName());
         tvSignature.setText(myTool.getSignature());
     }
@@ -78,6 +97,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
         ivMsg.setOnClickListener(this);
         ivSetting.setOnClickListener(this);
         civHeadImg.setOnLongClickListener(this);
+        tvLogin.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +123,9 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
 
         tvNickName = (TextView) v.findViewById(R.id.tv_nickname);
         tvSignature = (TextView) v.findViewById(R.id.tv_signature);
+        tvLogin = (TextView) v.findViewById(R.id.tv_login);
+
+        llMsgSetting = (LinearLayout) v.findViewById(R.id.ll_msg_setting);
 
         myTool = new CommonTools(getActivity());
     }
@@ -136,17 +159,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 myTool.startActivity(AddCameraActivity.class);
                 break;
             case R.id.iv_msg:
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("系统消息")
-                        .setContentText("还在进一步完善当中!")
-                        .setConfirmText("确  定!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                        .show();
+                myTool.startActivity(SysMsgActivity.class);
                 break;
             case R.id.iv_setting:
                 myTool.startActivity(SettingsActivity.class);
@@ -156,6 +169,9 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.rl_myinfo:
                 myTool.startActivity(MyInfoActivity.class);
+                break;
+            case R.id.tv_login:
+                myTool.startActivity(LoginActivity.class);
                 break;
         }
     }

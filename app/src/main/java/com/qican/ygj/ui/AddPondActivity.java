@@ -3,7 +3,7 @@
  */
 package com.qican.ygj.ui;
 
-import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,31 +16,45 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TResult;
 import com.qican.ygj.R;
+import com.qican.ygj.listener.OnDialogListener;
+import com.qican.ygj.ui.userinfo.PicChooseDialog;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import net.sf.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.Call;
 
-public class AddPondActivity extends Activity implements View.OnClickListener {
+public class AddPondActivity extends TakePhotoActivity implements View.OnClickListener, OnDialogListener {
     private static final int IMAGE_REQUEST_CODE = 1;
     private static final String TAG = "AddPondActivity";
     private LinearLayout llBack, llAddPond;
     private ImageView ivAddimg, ivClose;
     private CommonTools myTool;
     private ArrayList<String> mSelectPath = null;
+    private String pondCoverAddress = null;
     private ImageView ivImgDesc;
     private EditText edtPondName, edtPondDesc;
     private String pondName, pondDesc;
     private SweetAlertDialog mDialog;
+
+    private PicChooseDialog mPondDialog;
+    CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(200 * 1024).setMaxPixel(600).create();
+    CropOptions cropOptions = new CropOptions.Builder().setAspectX(3).setAspectY(2).setWithOwnCrop(true).create();
+    private TakePhoto takePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +79,8 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
 
         edtPondName = (EditText) findViewById(R.id.edt_pond_name);
         edtPondDesc = (EditText) findViewById(R.id.edt_pond_desc);
+        mPondDialog = new PicChooseDialog(this, R.style.Translucent_NoTitle);
+        takePhoto = getTakePhoto();
 
         myTool = new CommonTools(this);
     }
@@ -76,6 +92,8 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
         ivAddimg.setOnClickListener(this);
         ivImgDesc.setOnClickListener(this);
         ivClose.setOnClickListener(this);
+
+        mPondDialog.setOnDialogListener(this);
     }
 
     @Override
@@ -85,16 +103,12 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.iv_addimg:
-                // 跳转到图片选择器
-                MultiImageSelector.create(this)
-                        .showCamera(true) // show camera or not. true by default
-                        .single() // single mode
-                        .origin(mSelectPath) // original select data set, used width #.multi()
-                        .start(this, IMAGE_REQUEST_CODE);
+                //添加图片
+                mPondDialog.show();
                 break;
             case R.id.iv_imgdesc:
                 Bundle bundle = new Bundle();
-                bundle.putString("path", mSelectPath.get(0));
+                bundle.putString("path", pondCoverAddress);
                 Intent intent = new Intent(this, PreviewActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -141,14 +155,10 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
         mDialog.show();
 
         File pondFile = null;
-        if (mSelectPath == null) {
+        if (pondCoverAddress == null) {
             pondFile = myTool.getDefaultPondImg();
         } else {
-            if (mSelectPath.size() != 0) {
-                pondFile = new File(mSelectPath.get(0));
-            } else {
-                pondFile = myTool.getDefaultPondImg();
-            }
+            pondFile = new File(pondCoverAddress);
         }
 
         Log.i(TAG, "addPond: " + pondFile.toString());
@@ -175,7 +185,10 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        switch (response) {
+                        JSONObject obj = JSONObject.fromObject(response);
+                        String msg = obj.getString("message");
+
+                        switch (msg) {
                             case "error":
                                 //添加池塘信息,成功的提示对话框
                                 mDialog.setTitleText("添加失败!")
@@ -212,7 +225,7 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
                                 break;
                             default:
                                 //添加池塘信息,成功的提示对话框
-                                mDialog.setTitleText("其他信息："+response)
+                                mDialog.setTitleText("其他信息：" + response)
                                         .setConfirmText("完  成")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
@@ -226,34 +239,51 @@ public class AddPondActivity extends Activity implements View.OnClickListener {
                 });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // 图片选择结果回调
-        if (requestCode == IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Get the result list of select image paths
-                mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                // do your logic ....
-                Log.i(TAG, "path: " + mSelectPath.toString());
-                showImageByPath(mSelectPath);
-            }
-        }
-    }
-
     /**
      * 显示池塘封面图片到图片预览上
      *
-     * @param mSelectPath
+     * @param path
      */
-    private void showImageByPath(ArrayList<String> mSelectPath) {
-        if (mSelectPath != null) {
-            if (mSelectPath.size() != 0) {
-                ivImgDesc.setVisibility(View.VISIBLE);
-                ivAddimg.setVisibility(View.GONE);
-                ivClose.setVisibility(View.VISIBLE);
-                Glide.with(this).load(mSelectPath.get(0)).into(ivImgDesc);
-            }
+    private void showImageByPath(String path) {
+        if (path != null) {
+            ivImgDesc.setVisibility(View.VISIBLE);
+            ivAddimg.setVisibility(View.GONE);
+            ivClose.setVisibility(View.VISIBLE);
+            Glide.with(this).load(path).into(ivImgDesc);
         }
     }
+
+    @Override
+    public void dialogResult(Dialog dialog, String msg) {
+        switch (msg) {
+            case PicChooseDialog.FORM_CAMERA:
+                takePhoto.onEnableCompress(compressConfig, false);
+                takePhoto.onPickFromCaptureWithCrop(myTool.getPondFileUri(), cropOptions);
+                break;
+            case PicChooseDialog.FROM_FILE:
+                takePhoto.onEnableCompress(compressConfig, false);
+                takePhoto.onPickFromDocumentsWithCrop(myTool.getPondFileUri(), cropOptions);
+                break;
+        }
+    }
+
+    @Override
+    public void takeSuccess(final TResult result) {
+        super.takeSuccess(result);
+        pondCoverAddress = result.getImage().getPath();
+        showImageByPath(pondCoverAddress);
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+        myTool.showInfo("选择失败:" + msg);
+    }
+
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
+        myTool.showInfo("取消选择");
+    }
+
 }

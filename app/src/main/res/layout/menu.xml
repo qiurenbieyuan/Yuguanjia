@@ -24,18 +24,41 @@
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_msg"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/message" />
+            <LinearLayout
+                android:id="@+id/ll_msg_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_setting"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/setting" />
+                <ImageView
+                    android:id="@+id/iv_msg"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/message" />
+
+                <ImageView
+                    android:id="@+id/iv_setting"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/setting" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_selector_title"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="登录"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textsize_normal" />
+
         </LinearLayout>
 
 
@@ -60,8 +83,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="qiurenbieyuan@qq.com"
-                android:textColor="@color/white" />
+                android:ellipsize="end"
+                android:hint="暂时没有签名"
+                android:maxLines="2"
+                android:textColor="@color/white"
+                android:textColorHint="@color/line_color" />
         </LinearLayout>
     </RelativeLayout>
 

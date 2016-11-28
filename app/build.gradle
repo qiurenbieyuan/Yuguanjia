@@ -60,4 +60,6 @@ dependencies {
     // Http请求
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //头像剪裁
+    compile 'com.jph.takephoto:takephoto_library:4.0.1'
 }

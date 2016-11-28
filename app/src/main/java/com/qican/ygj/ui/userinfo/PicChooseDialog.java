@@ -1,5 +1,5 @@
 /**
- * 二维码显示框
+ * 头像选择
  */
 package com.qican.ygj.ui.userinfo;
 
@@ -9,59 +9,57 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import com.qican.ygj.R;
+import com.qican.ygj.listener.OnDialogListener;
 import com.qican.ygj.utils.CommonTools;
 
 
-public class TwodcodeDialog extends Dialog implements View.OnClickListener {
+public class PicChooseDialog extends Dialog implements View.OnClickListener {
 
+    public static final String FROM_FILE = "from_file";
+    public static final String FORM_CAMERA = "from_camera";
     private Context mContext;
-    private ImageView ivHeadImg;
     private CommonTools myTool;
-    private TextView tvNickName;
-    private LinearLayout llDialog;
-    private ImageView ivSex;
+    private RelativeLayout rlFile, rlCamera;
+    private OnDialogListener l;
+    private ImageView ivCancel;
 
-
-    public TwodcodeDialog(Context context, int theme) {
-        super(context, theme);
-        mContext = context;
+    public PicChooseDialog(Context context) {
+        this(context, R.style.Translucent_NoTitle);
     }
 
-    public TwodcodeDialog(Context context) {
-        super(context);
+    public PicChooseDialog(Context context, int theme) {
+        super(context, theme);
+        mContext = context;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_twodcode);
+        setContentView(R.layout.dialog_headchoose);
         initView();
         initData();
         initEvent();
     }
 
     private void initEvent() {
-        llDialog.setOnClickListener(this);
+        rlCamera.setOnClickListener(this);
+        rlFile.setOnClickListener(this);
+        ivCancel.setOnClickListener(this);
     }
 
     private void initData() {
-        if (!"".equals(myTool.getUserHeadURL())) {
-            myTool.showImage(myTool.getUserHeadURL(), ivHeadImg, R.drawable.defaultheadpic);
-        }
-        tvNickName.setText(myTool.getNickName());
-        myTool.showSex(myTool.getUserSex(), ivSex);
+
     }
 
-    private void initView() {
-        ivHeadImg = (ImageView) findViewById(R.id.iv_headimg);
-        tvNickName = (TextView) findViewById(R.id.tv_nickname);
-        ivSex = (ImageView) findViewById(R.id.iv_sex);
 
-        llDialog = (LinearLayout) findViewById(R.id.ll_dialog);
+    private void initView() {
+        rlCamera = (RelativeLayout) findViewById(R.id.rl_camera);
+        rlFile = (RelativeLayout) findViewById(R.id.rl_file);
+
+        ivCancel = (ImageView) findViewById(R.id.iv_cancel);
 
         myTool = new CommonTools(mContext);
     }
@@ -72,10 +70,10 @@ public class TwodcodeDialog extends Dialog implements View.OnClickListener {
         if (mContext != null && !((Activity) mContext).isFinishing()) {
             try {
                 super.show();
-                initData();
             } catch (Exception e) {
             }
         }
+
     }
 
     @Override
@@ -101,9 +99,26 @@ public class TwodcodeDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_dialog:
+            case R.id.rl_file:
+                if (l != null) {
+                    l.dialogResult(this, FROM_FILE);
+                }
+                dismiss();
+                break;
+            case R.id.rl_camera:
+                if (l != null) {
+                    l.dialogResult(this, FORM_CAMERA);
+                }
+                dismiss();
+                break;
+            case R.id.iv_cancel:
                 dismiss();
                 break;
         }
+    }
+
+
+    public void setOnDialogListener(OnDialogListener l) {
+        this.l = l;
     }
 }

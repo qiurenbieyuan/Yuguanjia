@@ -76,6 +76,15 @@
                 android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/defaultheadpic" />
+
+            <ProgressBar
+                android:id="@+id/pb_uploadhead"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <View

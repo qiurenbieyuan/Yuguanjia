@@ -122,6 +122,13 @@
         <activity
             android:name=".ui.mypond.PondDescActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.imgprocess.ImgActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.sysmsg.SysMsgActivity"
+            android:screenOrientation="portrait" />
 
         <!--Image Selector Entry-->
         <activity

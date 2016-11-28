@@ -46,11 +46,18 @@ public class YGJApp extends Application implements Thread.UncaughtExceptionHandl
 
         mContext = getApplicationContext();
         myTool = new CommonTools(this);
-        //初始化ImageLoader
-        initUIL();
-        //初始化萤石云SDK
-        initEZSDK();
-        initHttpUtils();
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                //初始化ImageLoader
+                initUIL();
+                //初始化萤石云SDK
+                initEZSDK();
+                initHttpUtils();
+            }
+        }.start();
     }
 
     private void initHttpUtils() {

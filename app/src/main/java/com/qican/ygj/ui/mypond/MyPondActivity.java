@@ -4,6 +4,7 @@
 package com.qican.ygj.ui.mypond;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,12 +23,15 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Pond;
+import com.qican.ygj.bean.User;
 import com.qican.ygj.listener.BeanCallBack;
+import com.qican.ygj.listener.OnDialogListener;
 import com.qican.ygj.ui.adapter.CommonAdapter;
 import com.qican.ygj.ui.adapter.ViewHolder;
 import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
+import com.qican.ygj.utils.YGJDatas;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -40,13 +44,14 @@ import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
 
-public class MyPondActivity extends Activity implements View.OnClickListener {
+public class MyPondActivity extends Activity implements View.OnClickListener, OnDialogListener {
     private static final String TAG = "MyPondActivity";
     private LinearLayout llBack, llAddCamera;
     private CommonTools myTool;
     private ListView mListView;
     private List<Pond> mDatas;
     private PondAdapter mAdpater;
+    private HandlePondDialog handlePondDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +127,6 @@ public class MyPondActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
     class PondAdapter extends CommonAdapter<Pond> {
 
         public PondAdapter(Context context, List<Pond> mDatas, int itemLayoutId) {
@@ -147,7 +151,61 @@ public class MyPondActivity extends Activity implements View.OnClickListener {
                     toPondInfoActivity(item);
                 }
             });
+            rlItem.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    toHandlePond(item);
+                    return false;
+                }
+            });
         }
+    }
+
+    private void toHandlePond(Pond pond) {
+        handlePondDialog = new HandlePondDialog(this, R.style.Translucent_NoTitle, pond);
+        handlePondDialog.setOnDialogListener(this);
+        handlePondDialog.show();
+    }
+
+    @Override
+    public void dialogResult(Dialog dialog, String msg) {
+        switch (msg) {
+            case HandlePondDialog.DELETE:
+                //删除池塘
+                deletePond(((HandlePondDialog) dialog).getPond());
+                break;
+            case HandlePondDialog.TOP:
+                break;
+        }
+    }
+
+    private void deletePond(final Pond pond) {
+        String url = ConstantValue.SERVICE_ADDRESS + "deletePond";
+        // 更新用户信息到本地
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("pondId", pond.getId())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        myTool.showInfo("删除失败，请稍后重试！异常：【" + e.toString() + "】");
+                    }
+
+                    @Override
+                    public void onResponse(String result, int id) {
+                        switch (result) {
+                            case "success":
+                                mDatas.remove(pond);
+                                mAdpater.notifyDataSetChanged();
+                                break;
+                            case "error":
+                                myTool.showInfo("删除失败，请稍后重试！");
+                                break;
+                        }
+                    }
+                });
     }
 
     /**
