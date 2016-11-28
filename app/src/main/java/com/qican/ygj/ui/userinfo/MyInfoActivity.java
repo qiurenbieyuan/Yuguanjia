@@ -51,7 +51,7 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
     private ImageView ivHeadImg;
     private TakePhoto takePhoto;
     private ProgressBar pbUploadHead;
-    CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(100 * 1024).setMaxPixel(200).create();
+    CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(200 * 1024).setMaxPixel(800).create();
     CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create();
 
     @Override
@@ -143,7 +143,7 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                 mSexDialog.show();
                 break;
             case R.id.iv_headimg:
-
+                myTool.startActivity(HeadInfoActivity.class);
                 break;
         }
     }

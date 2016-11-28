@@ -129,6 +129,9 @@
         <activity
             android:name=".ui.sysmsg.SysMsgActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.userinfo.HeadInfoActivity"
+            android:screenOrientation="portrait" />
 
         <!--Image Selector Entry-->
         <activity
