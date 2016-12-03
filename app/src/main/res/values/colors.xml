@@ -155,5 +155,11 @@
 
     <color name="head_border">#0668f1</color>
     <color name="light_blue">#d9e9ff</color>
+    <!--下拉刷新文字颜色-->
+    <color name="refresh_text_color_gray">#999999</color>
 
+    <color name="color_slide1">#2291f5</color>
+    <color name="color_slide2">#f99401</color>
+    <color name="color_slide3">#ef4135</color>
+    <color name="color_slide4">#4caf50</color>
 </resources>

@@ -26,6 +26,7 @@ import com.jph.takephoto.model.TResult;
 import com.qican.ygj.R;
 import com.qican.ygj.listener.OnDialogListener;
 import com.qican.ygj.listener.OnSexDialogListener;
+import com.qican.ygj.ui.intro.IntroActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
 import com.qican.ygj.utils.YGJDatas;
@@ -145,6 +146,9 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
             case R.id.iv_headimg:
                 myTool.startActivity(HeadInfoActivity.class);
                 break;
+            case R.id.rl_userid:
+                myTool.startActivityForResult("notFirstIn", IntroActivity.class, 0);
+                break;
         }
     }
 
@@ -182,11 +186,7 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                     public void onResponse(String response, int id) {
                         pbUploadHead.setVisibility(View.GONE);
                         Log.i(TAG, "onResponse: " + response);
-
-                        JSONObject obj = JSONObject.fromObject(response);
-                        String msg = obj.getString("message");
-
-                        switch (msg) {
+                        switch (response) {
                             case "success":
                                 Bitmap bitmap = BitmapFactory.decodeFile(result.getImage().getPath());
                                 ivHeadImg.setImageBitmap(bitmap);

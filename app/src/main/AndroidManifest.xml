@@ -64,6 +64,11 @@
             android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
+            android:name=".ui.intro.IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
             android:name="com.videogo.main.EzvizWebViewActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
@@ -81,9 +86,8 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.PreviewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:name=".ui.mypond.PreviewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SettingsActivity"
             android:screenOrientation="portrait" />

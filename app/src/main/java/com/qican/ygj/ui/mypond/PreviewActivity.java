@@ -1,13 +1,16 @@
 /**
  * 添加池塘
  */
-package com.qican.ygj.ui;
+package com.qican.ygj.ui.mypond;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.qican.ygj.R;
 
@@ -18,7 +21,7 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "AddPondActivity";
     private String path;
     private SketchImageView sketchImageView;
-    private ImageView ivBack;
+    private LinearLayout llBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +39,19 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
     private void initData() {
         // 通过文件路径设置
-        sketchImageView.displayImage(path);
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        sketchImageView.setImageBitmap(bitmap);
         sketchImageView.setSupportZoom(true);
     }
 
     private void initView() {
         sketchImageView = (SketchImageView) findViewById(R.id.iv_preview);
-        ivBack = (ImageView) findViewById(R.id.iv_back);
+        llBack = (LinearLayout) findViewById(R.id.ll_back);
     }
 
     private void initEvent() {
         sketchImageView.setOnClickListener(this);
-        ivBack.setOnClickListener(this);
+        llBack.setOnClickListener(this);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_preview:
                 break;
-            case R.id.iv_back:
+            case R.id.ll_back:
                 finish();
                 break;
         }

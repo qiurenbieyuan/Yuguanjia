@@ -22,6 +22,7 @@ import com.qican.ygj.listener.OnFramentListener;
 import com.qican.ygj.ui.login.LoginActivity;
 import com.qican.ygj.ui.mypond.MyPondActivity;
 import com.qican.ygj.ui.sysmsg.SysMsgActivity;
+import com.qican.ygj.ui.userinfo.HeadInfoActivity;
 import com.qican.ygj.ui.userinfo.MyInfoActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.view.CircleImageView;
@@ -97,6 +98,7 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
         ivMsg.setOnClickListener(this);
         ivSetting.setOnClickListener(this);
         civHeadImg.setOnLongClickListener(this);
+        civHeadImg.setOnClickListener(this);
         tvLogin.setOnClickListener(this);
     }
 
@@ -172,6 +174,9 @@ public class SlideMenuFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.tv_login:
                 myTool.startActivity(LoginActivity.class);
+                break;
+            case R.id.civ_headpic:
+                myTool.startActivity(HeadInfoActivity.class);
                 break;
         }
     }

@@ -38,7 +38,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 
-public class PondFragment extends Fragment implements OnTaskListener {
+public class PondFragment extends Fragment {
 
     private static final int TASK_LOAD_POND = 001;
     private CommonTools myTool;
@@ -47,7 +47,6 @@ public class PondFragment extends Fragment implements OnTaskListener {
     private PondAdapter mAdapter;
     private List<Pond> mData = null;
     private OnFramentListener mCallBack;
-    private LoadPondTask mLoadPondTask;
     private ImageView ivProgress;
 
 
@@ -76,14 +75,13 @@ public class PondFragment extends Fragment implements OnTaskListener {
     }
 
     private void initData() {
-        mData = new ArrayList<>();
-
-        mLoadPondTask = new LoadPondTask(getActivity(), TASK_LOAD_POND);
-        mLoadPondTask.setOnTaskFinishListener(this);
-        mLoadPondTask.setIvProgress(ivProgress);
-
-        Map<String, String> map = new HashMap<>();
-        mLoadPondTask.execute(map);
+        mData = myTool.getPondList();
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
+        mAdapter = new PondAdapter(getActivity(), mData, R.layout.item_pond);
+        mGridView.setAdapter(mAdapter);
+        loadPonds();
     }
 
     private void loadPonds() {
@@ -143,67 +141,6 @@ public class PondFragment extends Fragment implements OnTaskListener {
                     }
                 }
             });
-        }
-    }
-
-    class LoadPondTask extends CommonTask<List<Pond>> {
-
-        public LoadPondTask(Context context, int taskID) {
-            super(context, taskID);
-        }
-
-        @Override
-        public PostResult getResult(Map inputPara) {
-            PostResult<List<Pond>> result = new PostResult<>();
-            List<Pond> mData = new ArrayList<>();
-
-            //模拟网络请求
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-//                e.printStackTrace();
-                result.setException(e);
-                return result;
-            }
-
-            Pond pond1 = new Pond();
-            pond1.setImgUrl("http://img5.imgtn.bdimg.com/it/u=1481365631,1136133954&fm=21&gp=0.jpg");
-            pond1.setName("池塘1");
-            mData.add(pond1);
-
-            Pond pond2 = new Pond();
-            pond2.setImgUrl("http://img4.imgtn.bdimg.com/it/u=3849379134,1749767660&fm=21&gp=0.jpg");
-            pond2.setName("池塘2");
-            mData.add(pond2);
-
-            Pond pond3 = new Pond();
-            pond3.setImgUrl("http://img5.imgtn.bdimg.com/it/u=1432240924,2436835975&fm=21&gp=0.jpg");
-            pond3.setName("池塘3");
-            mData.add(pond3);
-
-            result.setResult(mData);
-
-            return result;
-        }
-    }
-
-    @Override
-    public void taskFailed(CommonTask t, Exception e) {
-        switch (t.getTaskID()) {
-            case TASK_LOAD_POND:
-                break;
-        }
-    }
-
-    @Override
-    public void taskSuccess(CommonTask t, Object result) {
-        switch (t.getTaskID()) {
-            case TASK_LOAD_POND:
-                mData = (List<Pond>) result;
-                mAdapter = new PondAdapter(getActivity(), mData, R.layout.item_pond);
-                mGridView.setAdapter(mAdapter);
-                loadPonds();
-                break;
         }
     }
 }

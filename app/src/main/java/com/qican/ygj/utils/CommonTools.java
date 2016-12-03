@@ -7,14 +7,12 @@ package com.qican.ygj.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -30,16 +28,16 @@ import com.qican.ygj.R;
 import com.qican.ygj.bean.Pond;
 import com.qican.ygj.bean.Pump;
 import com.qican.ygj.listener.LoggingListener;
-import com.qican.ygj.task.CommonTask;
-import com.qican.ygj.ui.SettingsActivity;
 import com.qican.ygj.ui.login.LoginActivity;
-import com.qican.ygj.ui.mypond.PondInfoActivity;
-import com.squareup.picasso.Picasso;
+import com.zhy.base.cache.disk.DiskLruCacheHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
@@ -60,12 +58,20 @@ public class CommonTools {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     private CropHelper mCropHelper;
+    private DiskLruCacheHelper cacheHelper = null;
 
     public CommonTools(Context context) {
         this.mContext = context;
 
         sp = mContext.getSharedPreferences("userinfo", mContext.MODE_PRIVATE);
         editor = sp.edit();
+
+        try {
+            cacheHelper = new DiskLruCacheHelper(mContext);
+
+        } catch (IOException e) {
+            showExceptionInfo(e.toString());
+        }
     }
 
     /**
@@ -321,6 +327,22 @@ public class CommonTools {
         return sp.getBoolean(ConstantValue.KEY_ISLOGIN, false);
     }
 
+    /**
+     * 设置第一次登陆
+     *
+     * @param firstIn
+     * @return
+     */
+    public CommonTools setFirstIn(boolean firstIn) {
+        editor.putBoolean(ConstantValue.KEY_FIRSTIN, firstIn);
+        editor.commit();
+        return this;
+    }
+
+    public boolean isFirstIn() {
+        return sp.getBoolean(ConstantValue.KEY_FIRSTIN, true);
+    }
+
     public CommonTools setUserName(String userName) {
         editor.putString(ConstantValue.KEY_USERNAME, userName);
         editor.commit();
@@ -463,6 +485,44 @@ public class CommonTools {
                 imageView.setImageBitmap(female);
                 break;
         }
+        return this;
+    }
+
+    private void showExceptionInfo(String info) {
+        new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("异常！")
+                .setContentText("未处置的异常，异常信息为[e:" + info + "]")
+                .setConfirmText("确  定!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * 从本地获取池塘列表
+     *
+     * @return 池塘列表
+     */
+    public ArrayList<Pond> getPondList() {
+        List<Pond> datas = new ArrayList<>();
+        if (cacheHelper != null) {
+            datas = cacheHelper.getAsSerializable(ConstantValue.KEY_POND_LIST);
+        }
+        return (ArrayList<Pond>) datas;
+    }
+
+    /**
+     * 存储池塘列表到本地
+     *
+     * @param pondList
+     * @return
+     */
+    public CommonTools putPondList(List<Pond> pondList) {
+        cacheHelper.put(ConstantValue.KEY_POND_LIST, (ArrayList<Pond>) pondList);
         return this;
     }
 }

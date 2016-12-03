@@ -8,22 +8,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.R;
 import com.qican.ygj.bean.Pond;
-import com.qican.ygj.bean.User;
 import com.qican.ygj.listener.BeanCallBack;
 import com.qican.ygj.listener.OnDialogListener;
 import com.qican.ygj.ui.adapter.CommonAdapter;
@@ -31,27 +22,31 @@ import com.qican.ygj.ui.adapter.ViewHolder;
 import com.qican.ygj.ui.scan.CaptureActivity;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
-import com.qican.ygj.utils.YGJDatas;
+import com.qican.ygj.view.refresh.PullListView;
+import com.qican.ygj.view.refresh.PullToRefreshLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
 
-public class MyPondActivity extends Activity implements View.OnClickListener, OnDialogListener {
+public class MyPondActivity extends Activity implements View.OnClickListener, OnDialogListener, PullToRefreshLayout.OnRefreshListener {
     private static final String TAG = "MyPondActivity";
     private LinearLayout llBack, llAddCamera;
     private CommonTools myTool;
-    private ListView mListView;
+    //    private ListView mListView;
     private List<Pond> mDatas;
     private PondAdapter mAdpater;
     private HandlePondDialog handlePondDialog;
+    private int beginItem = 0, endItem = 0, pageCnt = 1;
+    private String url = ConstantValue.SERVICE_ADDRESS + "findPondByUser";
+    private boolean noMore = false;
+
+    //下拉刷新
+    private PullToRefreshLayout mRefreshLayout;
+    private PullListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,31 +64,88 @@ public class MyPondActivity extends Activity implements View.OnClickListener, On
 
     private void initData() {
 //        mDatas = YGJDatas.getPondsDatas();
-        mDatas = new ArrayList<>();
+        mDatas = myTool.getPondList();
+        if (mDatas == null) {
+            mDatas = new ArrayList<>();
+        }
+        mAdpater = new PondAdapter(MyPondActivity.this, mDatas, R.layout.item_choose_pond);
+        mListView.setAdapter(mAdpater);
 
-        String url = ConstantValue.SERVICE_ADDRESS + "findPondByUser";
+        if (mDatas.isEmpty()) {
+            beginItem = pageCnt;
+            refreshPonds();
+        }
+    }
+
+    private void refreshPonds() {
         Log.i(TAG, "addPond: userId[" + myTool.getUserId() + "]");
-
+        if (!mDatas.isEmpty()) {
+            beginItem = mDatas.size();
+        }
         OkHttpUtils
                 .post()
                 .url(url)
                 .addParams("userId", myTool.getUserId())
+                .addParams("beginItem", String.valueOf(0))
+                .addParams("endItem", String.valueOf(beginItem))
                 .build()
                 .execute(new BeanCallBack<List<com.qican.ygj.beanfromzhu.Pond>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
-
+                        Log.i(TAG, "onError: e-->" + e.toString());
+                        mRefreshLayout.refreshFinish(true);
                     }
 
                     @Override
                     public void onResponse(List<com.qican.ygj.beanfromzhu.Pond> pondList, int id) {
+                        Log.i(TAG, "onResponse:beginItem," + 0 + ",endItem," + beginItem + ", pondList-->" + pondList.toString());
+                        mRefreshLayout.refreshFinish(true);
+                        if (pondList.isEmpty()) {
+                            myTool.showInfo("没有池塘数据");
+                            return;
+                        }
+                        mDatas.clear();
                         for (int i = 0; i < pondList.size(); i++) {
                             Pond pond = new Pond(pondList.get(i));
                             mDatas.add(pond);
                         }
-                        mAdpater = new PondAdapter(MyPondActivity.this, mDatas, R.layout.item_choose_pond);
-                        mListView.setAdapter(mAdpater);
+                        //刷新数据至ListView
+                        mAdpater.notifyDataSetChanged();
+                        myTool.putPondList(mDatas);
+                    }
+                });
+    }
+
+    private void loadMorePonds() {
+        beginItem = mDatas.size();
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addParams("userId", myTool.getUserId())
+                .addParams("beginItem", String.valueOf(beginItem))
+                .addParams("endItem", String.valueOf(pageCnt))
+                .build()
+                .execute(new BeanCallBack<List<com.qican.ygj.beanfromzhu.Pond>>() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.i(TAG, "onError: e-->" + e.toString());
+                        mRefreshLayout.loadMoreFinish(true);
+                    }
+
+                    @Override
+                    public void onResponse(List<com.qican.ygj.beanfromzhu.Pond> pondList, int id) {
+                        Log.i(TAG, "onResponse:beginItem," + beginItem + ",endItem," + endItem + ", pondList-->" + pondList.toString());
+                        mRefreshLayout.loadMoreFinish(true);
+                        if (pondList.isEmpty()) {
+                            myTool.showInfo("没有更多了！");
+                            return;
+                        }
+                        for (int i = 0; i < pondList.size(); i++) {
+                            Pond pond = new Pond(pondList.get(i));
+                            mDatas.add(pond);
+                        }
+                        //刷新数据至ListView
+                        mAdpater.notifyDataSetChanged();
                     }
                 });
     }
@@ -102,7 +154,9 @@ public class MyPondActivity extends Activity implements View.OnClickListener, On
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llAddCamera = (LinearLayout) findViewById(R.id.ll_add);
 
-        mListView = (ListView) findViewById(R.id.lv_mypond);
+        mRefreshLayout = (PullToRefreshLayout) findViewById(R.id.pullToRefreshLayout);
+        mListView = (PullListView) findViewById(R.id.pullListView);
+//        mListView = (ListView) findViewById(R.id.lv_mypond);
 
         myTool = new CommonTools(this);
     }
@@ -110,6 +164,20 @@ public class MyPondActivity extends Activity implements View.OnClickListener, On
     private void initEvent() {
         llBack.setOnClickListener(this);
         llAddCamera.setOnClickListener(this);
+        mRefreshLayout.setOnRefreshListener(this);
+    }
+
+    /**
+     * 下拉刷新与加载更多
+     */
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        refreshPonds();
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        loadMorePonds();
     }
 
     @Override

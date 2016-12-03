@@ -66,14 +66,32 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <!--历史和收货地址-->
-    <ListView
-        android:id="@+id/lv_mypond"
+    <com.qican.ygj.view.refresh.PullToRefreshLayout
+        android:id="@+id/pullToRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:divider="@null"
-        android:dividerHeight="8dp" />
+        android:layout_height="match_parent">
+
+        <com.qican.ygj.view.refresh.PullListView
+            android:id="@+id/pullListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            android:scrollingCache="false">
+
+        </com.qican.ygj.view.refresh.PullListView>
+    </com.qican.ygj.view.refresh.PullToRefreshLayout>
+
+    <!--历史和收货地址-->
+    <!--<ListView-->
+    <!--android:id="@+id/lv_mypond"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:divider="@null"-->
+    <!--android:dividerHeight="8dp" />-->
 
     <RelativeLayout
         android:id="@+id/rl_nopond"

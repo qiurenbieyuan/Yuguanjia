@@ -12,12 +12,6 @@
         android:background="@color/black">
 
         <ImageView
-            android:id="@+id/iv_pond_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@mipmap/defaultpondimg" />
-
-        <ImageView
             android:id="@+id/iv_nodata"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -33,6 +27,18 @@
             android:text="啊哦，暂无预览！"
             android:textColor="@color/text_gray" />
 
+        <ImageView
+            android:id="@+id/iv_pond_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/pb_updatecover"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tv_pond_info"
             android:layout_width="match_parent"
@@ -41,7 +47,7 @@
             android:background="#88000000"
             android:ellipsize="end"
             android:maxLines="2"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="this is the pond detial info!"
             android:textColor="@color/white"
             android:textSize="@dimen/textsize_normal" />

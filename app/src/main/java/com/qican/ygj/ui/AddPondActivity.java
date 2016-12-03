@@ -5,6 +5,8 @@ package com.qican.ygj.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -13,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.jph.takephoto.app.TakePhoto;
@@ -23,19 +24,16 @@ import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TResult;
 import com.qican.ygj.R;
 import com.qican.ygj.listener.OnDialogListener;
+import com.qican.ygj.ui.mypond.PreviewActivity;
 import com.qican.ygj.ui.userinfo.PicChooseDialog;
 import com.qican.ygj.utils.CommonTools;
 import com.qican.ygj.utils.ConstantValue;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import net.sf.json.JSONObject;
-
 import java.io.File;
-import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.Call;
 
 public class AddPondActivity extends TakePhotoActivity implements View.OnClickListener, OnDialogListener {
@@ -44,7 +42,6 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
     private LinearLayout llBack, llAddPond;
     private ImageView ivAddimg, ivClose;
     private CommonTools myTool;
-    private ArrayList<String> mSelectPath = null;
     private String pondCoverAddress = null;
     private ImageView ivImgDesc;
     private EditText edtPondName, edtPondDesc;
@@ -117,7 +114,7 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
                 ivImgDesc.setVisibility(View.GONE);
                 ivClose.setVisibility(View.GONE);
                 ivAddimg.setVisibility(View.VISIBLE);
-                mSelectPath.clear();//去除照片地址信息
+                pondCoverAddress = null;
                 break;
             case R.id.ll_add:
                 //添加池塘
@@ -185,10 +182,7 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
 
                     @Override
                     public void onResponse(String response, int id) {
-                        JSONObject obj = JSONObject.fromObject(response);
-                        String msg = obj.getString("message");
-
-                        switch (msg) {
+                        switch (response) {
                             case "error":
                                 //添加池塘信息,成功的提示对话框
                                 mDialog.setTitleText("添加失败!")
@@ -249,7 +243,8 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
             ivImgDesc.setVisibility(View.VISIBLE);
             ivAddimg.setVisibility(View.GONE);
             ivClose.setVisibility(View.VISIBLE);
-            Glide.with(this).load(path).into(ivImgDesc);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            ivImgDesc.setImageBitmap(bitmap);
         }
     }
 
@@ -270,6 +265,7 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
     @Override
     public void takeSuccess(final TResult result) {
         super.takeSuccess(result);
+        Log.i(TAG, "takeSuccess,图片路径： " + result.getImage().getPath());
         pondCoverAddress = result.getImage().getPath();
         showImageByPath(pondCoverAddress);
     }
@@ -285,5 +281,4 @@ public class AddPondActivity extends TakePhotoActivity implements View.OnClickLi
         super.takeCancel();
         myTool.showInfo("取消选择");
     }
-
 }

@@ -19,6 +19,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.qican.ygj.MainActivity;
 import com.qican.ygj.R;
+import com.qican.ygj.ui.intro.IntroActivity;
 import com.qican.ygj.utils.CommonTools;
 
 
@@ -27,6 +28,7 @@ public class WelcomeActivity extends Activity {
     private TextView mTvDownTime;
     private CountDownTimer mTimer;
     private CommonTools myTool;
+    private String firstIn = "firstIn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,13 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         initView();
         initEvent();
-
-        toMain();
-//        if (myTool.isFirstUse()) {
-//            startActivity(new Intent(this, GuidePageActivity.class));
-//            myTool.setFirstUse(false);
-//            finish();
-//        } else {
-//            toMain();
-//        }
+        if (myTool.isFirstIn()) {
+            myTool.setFirstIn(false);
+            myTool.startActivityForResult(firstIn, IntroActivity.class, 0);
+            finish();
+        } else {
+            toMain();
+        }
     }
 
 
